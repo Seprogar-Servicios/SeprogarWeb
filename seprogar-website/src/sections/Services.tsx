@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wrench, Droplets, Zap, CheckCircle, ArrowRight } from 'lucide-react';
+import { Wrench, Droplets, Zap, CheckCircle, ArrowRight, Wind, Brush } from 'lucide-react';
 import type { ServiceCardProps } from '../types';
 
 const services: ServiceCardProps[] = [
@@ -14,7 +14,7 @@ const services: ServiceCardProps[] = [
       'Mantenimiento preventivo',
       'Atención de emergencias 24/7'
     ],
-    gradient: 'from-blue-500 to-cyan-500'
+    gradient: 'from-blue-600 to-blue-800'
   },
   {
     icon: <Wrench className="w-8 h-8" />,
@@ -41,14 +41,40 @@ const services: ServiceCardProps[] = [
       'Mantenimiento industrial'
     ],
     gradient: 'from-yellow-400 to-yellow-600'
+  },
+  {
+    icon: <Wind className="w-8 h-8" />,
+    title: 'Aires Acondicionados',
+    description: 'Instalación y mantenimiento de sistemas de climatización',
+    items: [
+      'Instalación de equipos split',
+      'Mantenimiento preventivo',
+      'Recarga de gas refrigerante',
+      'Reparación de fugas',
+      'Asesoramiento técnico'
+    ],
+    gradient: 'from-blue-700 to-blue-900'
+  },
+  {
+    icon: <Brush className="w-8 h-8" />,
+    title: 'Pintura General',
+    description: 'Servicios profesionales de pintura para interiores y exteriores',
+    items: [
+      'Pintura de interiores',
+      'Pintura de exteriores',
+      'Preparación de superficies',
+      'Reparación de paredes',
+      'Asesoramiento de colores'
+    ],
+    gradient: 'from-purple-500 to-purple-700'
   }
 ];
 
 export const Services = () => {
   return (
-    <section id="servicios" className="relative py-24 bg-gradient-to-br from-[#f8fafc] to-[#f0f9ff] overflow-hidden">
+    <section id="servicios" className="relative py-24 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
       {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAzMzYiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')]"></div>
+      <div className="absolute inset-0 opacity-3 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAzMzYiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')]"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -74,7 +100,7 @@ export const Services = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
           <AnimatePresence>
             {services.map((service, index) => (
               <motion.div
@@ -128,7 +154,9 @@ export const Services = () => {
                       transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                     >
                       <a 
-                        href="#contacto" 
+                        href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20servicio"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center font-medium text-gray-900 hover:text-[#F37021] transition-colors group"
                       >
                         <span className="mr-2">Solicitar servicio</span>

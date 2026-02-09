@@ -47,10 +47,11 @@ export const Footer = () => {
           >
             <div className="absolute -left-4 -top-4 w-16 h-16 bg-[#F37021]/20 rounded-full"></div>
             <div className="flex items-center space-x-3 mb-6 relative z-10">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#F37021] to-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-lg">
-                S
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">SEPROGAR</span>
+              <img 
+                src="/img/Seprogar-Logo-03.png"
+                alt="SEPROGAR"
+                className="h-10 w-auto"
+              />
             </div>
             <p className="text-gray-300 mb-8 text-sm leading-relaxed">
               Soluciones técnicas profesionales en plomería, gas y electricidad. Garantizamos calidad, seguridad y satisfacción en cada trabajo realizado.
@@ -157,16 +158,16 @@ export const Footer = () => {
                 <div className="w-8 h-8 bg-[#F37021]/10 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-[#F37021] transition-colors">
                   <Phone className="w-4 h-4 text-[#F37021] group-hover:text-white transition-colors" />
                 </div>
-                <a href="tel:+541136250298" className="text-gray-300 hover:text-white transition-colors">
-                  +54 11 3625-0298
+                <a href="tel:+5491128484962" className="text-gray-300 hover:text-white transition-colors">
+                  +54 9 11 2848-4962
                 </a>
               </li>
               <li className="flex items-center group">
                 <div className="w-8 h-8 bg-[#F37021]/10 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-[#F37021] transition-colors">
                   <MessageCircle className="w-4 h-4 text-[#F37021] group-hover:text-white transition-colors" />
                 </div>
-                <a href="https://wa.me/5491136250298" className="text-gray-300 hover:text-white transition-colors">
-                  +54 9 11 3625-0298
+                <a href="https://wa.me/5491128484962" className="text-gray-300 hover:text-white transition-colors">
+                  +54 9 11 2848-4962
                 </a>
               </li>
               <li className="flex items-center group">

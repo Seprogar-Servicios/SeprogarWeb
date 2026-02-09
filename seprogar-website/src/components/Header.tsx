@@ -64,16 +64,20 @@ export const Header = () => {
             whileHover={{ scale: 1.02 }}
             transition={{ type: 'spring', stiffness: 400, damping: 10 }}
           >
-            <motion.div 
-              className="w-12 h-12 bg-[#000336] rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg"
+            <motion.img 
+              src="/img/Seprogar-Logo-02.png"
+              alt="Seprogar Icon"
+              className="h-10 w-auto"
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
-            >
-              S
-            </motion.div>
-            <span className="text-2xl font-extrabold bg-gradient-to-r from-[#000336] to-[#F37021] bg-clip-text text-transparent">
-              SEPROGAR
-            </span>
+            />
+            <motion.img 
+              src="/img/Seprogar-Logo-03.png"
+              alt="Seprogar"
+              className="h-8 w-auto"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            />
           </motion.a>
 
           {/* Desktop Navigation */}
@@ -106,7 +110,9 @@ export const Header = () => {
               </div>
             ))}
             <motion.a
-              href="#contacto"
+              href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20presupuesto"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-gradient-to-r from-[#F37021] to-orange-500 text-white px-6 py-2.5 rounded-full font-medium flex items-center space-x-2 shadow-lg hover:shadow-orange-200 transition-all duration-300 hover:scale-105"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -158,7 +164,9 @@ export const Header = () => {
                   </a>
                 ))}
                 <a
-                  href="#contacto"
+                  href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20presupuesto"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center mt-4 bg-gradient-to-r from-[#F37021] to-orange-500 text-white px-6 py-3 rounded-full font-medium shadow-lg hover:shadow-orange-200 transition-all duration-300"
                   onClick={() => setIsMenuOpen(false)}
                 >

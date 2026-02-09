@@ -21,7 +21,7 @@ export const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const phoneNumber = '5491136250298'; 
+    const phoneNumber = '5491128484962'; 
     const message = `Hola, mi nombre es ${formData.name}.
       Les escribo desde el formulario de contacto de Seprogar para solicitar más información sobre sus servicios de construcción.
 
@@ -147,7 +147,7 @@ const encodedMessage = encodeURIComponent(message);
                   value={formData.phone}
                   onChange={handleInputChange}
                   className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200"
-                  placeholder="+54 9 11 3625-0298"
+                  placeholder="Tu número de teléfono"
                   required
                 />
               </div>
@@ -238,10 +238,10 @@ const encodedMessage = encodeURIComponent(message);
               </div>
               <div className="ml-4">
                 <h4 className="font-semibold text-gray-900 text-lg">Teléfono</h4>
-                <a href="tel:+5491136250298" className="text-gray-900 hover:text-[#F37021] transition-colors text-lg font-medium">
-                  +54 9 11 3625-0298
+                <a href="tel:+5491128484962" className="text-gray-900 hover:text-[#F37021] transition-colors text-lg font-medium">
+                  +54 9 11 2848-4962
                 </a>
-                <p className="text-sm text-gray-500 mt-1">Lun a Vie: 8:00 - 18:00</p>
+                <p className="text-sm text-gray-500 mt-1">Lun a Dom: 8:00 - 18:00</p>
               </div>
             </div>
           </div>
@@ -250,12 +250,12 @@ const encodedMessage = encodeURIComponent(message);
             <h4 className="font-semibold text-gray-900 text-lg mb-4">Horario de atención</h4>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="font-medium text-gray-900">Lunes - Viernes</p>
+                <p className="font-medium text-gray-900">Lunes - Domingos</p>
                 <p className="text-gray-600">8:00 - 18:00</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="font-medium text-gray-900">Sábados</p>
-                <p className="text-gray-600">9:00 - 13:00</p>
+                <p className="font-medium text-gray-900">Atención regular</p>
+                <p className="text-gray-600">8:00 - 18:00</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-xl col-span-2">
                 <p className="font-medium text-gray-900">Emergencias</p>

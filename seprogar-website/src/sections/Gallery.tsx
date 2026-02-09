@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Zap, Wrench, Droplets } from 'lucide-react';
+import { Image as ImageIcon, X, ChevronLeft, ChevronRight, Zap, Wrench, Droplets, Brush, Wind } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
@@ -7,67 +7,67 @@ interface GalleryImage {
   id: number;
   src: string;
   title: string;
-  category: 'plomeria' | 'gas' | 'electricidad';
+  category: 'plomeria' | 'gas' | 'electricidad' | 'pintura' | 'aires';
   description?: string;
 }
 
-// Placeholder images - replace with your actual images
+// Imágenes reales de trabajos realizados por Seprogar
 export const galleryImages: GalleryImage[] = [
   {
     id: 1,
-    src: 'https://images.unsplash.com/photo-1600566752225-0d850a5a6229?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    title: 'Instalación de gas profesional',
-    category: 'gas',
-    description: 'Instalación completa de sistema de gas natural con los más altos estándares de seguridad.'
+    src: '/img/Seprogar-Trabajos-01.jpeg',
+    title: 'Instalación de termotanque',
+    category: 'plomeria',
+    description: 'Instalación profesional de termotanque en cocina, garantizando agua caliente eficiente y segura.'
   },
   {
     id: 2,
-    src: 'https://images.unsplash.com/photo-1592409065737-a25380a8c0af?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    title: 'Reparación eléctrica integral',
-    category: 'electricidad',
-    description: 'Solución de problemas eléctricos y actualización de instalaciones obsoletas.'
+    src: '/img/Seprogar-Trabajos-02.jpeg',
+    title: 'Instalación de cañerías para bomba de agua',
+    category: 'plomeria',
+    description: 'Instalación y reparación de cañerías para sistemas de bombeo de agua, optimizando el suministro y la presión.'
   },
   {
     id: 3,
-    src: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    title: 'Reforma de baño completo',
-    category: 'plomeria',
-    description: 'Renovación completa de baño con materiales de primera calidad y diseño moderno.'
+    src: '/img/Seprogar-Trabajos-03.jpeg',
+    title: 'Pintura y restauración de piscina',
+    category: 'pintura',
+    description: 'Pintura y restauración completa de piscina, incluyendo preparación de superficies y acabados profesionales.'
   },
   {
     id: 4,
-    src: 'https://images.unsplash.com/photo-1581094487229-6a7f8f19a2a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    title: 'Mantenimiento industrial',
-    category: 'electricidad',
-    description: 'Servicio de mantenimiento preventivo y correctivo para instalaciones industriales.'
+    src: '/img/Seprogar-Trabajos-04.jpeg',
+    title: 'Instalación de gas exterior',
+    category: 'gas',
+    description: 'Instalación de redes de gas subterráneas, cumpliendo con todas las normativas de seguridad.'
   },
   {
     id: 5,
-    src: 'https://images.unsplash.com/photo-1631549916768-411a9d530d4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    title: 'Instalación sanitaria',
-    category: 'plomeria',
-    description: 'Sistema de tuberías y desagües con materiales de larga duración.'
+    src: '/img/Seprogar-Trabajos-05.jpeg',
+    title: 'Instalación de gas interior',
+    category: 'gas',
+    description: 'Instalación de tuberías de gas en interiores, con acabados profesionales y seguros.'
   },
   {
     id: 6,
-    src: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    title: 'Revisión de instalaciones',
+    src: '/img/Seprogar-Trabajos-06.jpeg',
+    title: 'Revisión de medidor de gas',
     category: 'gas',
-    description: 'Inspección profesional de instalaciones de gas para garantizar su correcto funcionamiento.'
+    description: 'Verificación y ajuste de medidores de gas para asegurar la precisión y seguridad del sistema.'
   },
   {
     id: 7,
-    src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    title: 'Cableado estructurado',
-    category: 'electricidad',
-    description: 'Instalación de redes de datos y cableado estructurado para hogares y empresas.'
+    src: '/img/Seprogar-Trabajos-07.jpeg',
+    title: 'Instalación de bomba de agua',
+    category: 'plomeria',
+    description: 'Instalación y mantenimiento de bombas de agua para sistemas de suministro y presión.'
   },
   {
     id: 8,
-    src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    title: 'Sistema de calefacción',
+    src: '/img/Seprogar-Trabajos-08.jpeg',
+    title: 'Instalación de medidores de gas',
     category: 'gas',
-    description: 'Instalación y mantenimiento de sistemas de calefacción a gas de alta eficiencia.'
+    description: 'Configuración y supervisión de múltiples medidores de gas para propiedades residenciales y comerciales.'
   }
 ];
 
@@ -76,13 +76,17 @@ const categories = [
   { id: 'plomeria', name: 'Plomería', icon: <Droplets className="w-4 h-4 mr-2" /> },
   { id: 'gas', name: 'Gas', icon: <Wrench className="w-4 h-4 mr-2" /> },
   { id: 'electricidad', name: 'Electricidad', icon: <Zap className="w-4 h-4 mr-2" /> },
+  { id: 'pintura', name: 'Pintura', icon: <Brush className="w-4 h-4 mr-2" /> },
+  { id: 'aires', name: 'Aires Acondicionados', icon: <Wind className="w-4 h-4 mr-2" /> },
 ];
 
 const getCategoryColor = (category: string) => {
   switch (category) {
-    case 'plomeria': return 'from-blue-500 to-cyan-500';
+    case 'plomeria': return 'from-blue-600 to-blue-800';
     case 'gas': return 'from-orange-500 to-amber-500';
     case 'electricidad': return 'from-yellow-400 to-yellow-600';
+    case 'pintura': return 'from-purple-500 to-purple-700';
+    case 'aires': return 'from-blue-700 to-blue-900';
     default: return 'from-gray-500 to-gray-700';
   }
 };
@@ -170,9 +174,9 @@ export const Gallery = () => {
   }
 
   return (
-    <section id="trabajos" className="relative py-24 bg-gradient-to-br from-white to-gray-50 overflow-hidden">
+    <section id="trabajos" className="relative py-24 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
       {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAzMzYiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')]"></div>
+      <div className="absolute inset-0 opacity-3 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAzMzYiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')]"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -273,8 +277,8 @@ export const Gallery = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* View More Button */}
-        <motion.div
+        {/* View More Button - Oculto para uso futuro */}
+        {/* <motion.div
           className="text-center mt-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -294,7 +298,7 @@ export const Gallery = () => {
             </span>
             <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
           </motion.button>
-        </motion.div>
+        </motion.div> */}
       </div>
 
       {/* Lightbox */}

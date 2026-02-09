@@ -6,33 +6,33 @@ const features = [
     icon: <Award className="w-6 h-6" />,
     title: 'Experiencia',
     description: 'Más de 10 años de experiencia en el rubro, garantizando trabajos de calidad y satisfacción del cliente.',
-    gradient: 'from-purple-500 to-indigo-600'
+    gradient: 'from-blue-600 to-blue-800'
   },
   {
     icon: <ShieldCheck className="w-6 h-6" />,
     title: 'Seguridad',
     description: 'Técnicos certificados y habilitados, cumpliendo con todas las normas de seguridad vigentes.',
-    gradient: 'from-emerald-500 to-teal-600'
+    gradient: 'from-blue-700 to-blue-900'
   },
   {
     icon: <Clock3 className="w-6 h-6" />,
     title: 'Rapidez',
     description: 'Servicio de emergencias 24/7. Llegamos a tiempo y solucionamos tu problema rápidamente.',
-    gradient: 'from-amber-500 to-orange-600'
+    gradient: 'from-orange-500 to-amber-500'
   },
   {
     icon: <CheckCircle className="w-6 h-6" />,
     title: 'Garantía',
     description: 'Todos nuestros trabajos cuentan con garantía escrita. Estamos seguros de nuestro servicio.',
-    gradient: 'from-rose-500 to-pink-600'
+    gradient: 'from-orange-600 to-red-500'
   }
 ] as const;
 
 export const WhyUs = () => {
   return (
-    <section id="nosotros" className="relative py-24 bg-gradient-to-br from-white to-gray-50 overflow-hidden">
+    <section id="nosotros" className="relative py-24 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
       {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAzMzYiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')]"></div>
+      <div className="absolute inset-0 opacity-3 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAzMzYiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')]"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -121,7 +121,9 @@ export const WhyUs = () => {
               </p>
               
               <motion.a
-                href="#contacto"
+                href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20necesito%20contactarlos"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group inline-flex items-center justify-center bg-gradient-to-r from-[#F37021] to-[#FF9E5E] hover:from-[#FF9E5E] hover:to-[#F37021] text-white px-8 py-4 rounded-full font-medium transition-all duration-500 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
