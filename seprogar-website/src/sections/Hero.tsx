@@ -1,120 +1,218 @@
-import { motion } from 'framer-motion';
-import { Wrench, Phone, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Wrench, Phone, ChevronRight, ShieldCheck, Clock3 } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
+
+const ROTATING_WORDS = ['hogar', 'empresa', 'negocio', 'consorcio', 'obra', 'local'];
 
 export const Hero = () => {
+  const { isDark } = useTheme();
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
+    }, 2600);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const currentWord = ROTATING_WORDS[wordIndex];
+
   return (
-    <section 
-      id="inicio" 
-      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#000336] to-[#0F4C81] text-white pt-20 overflow-hidden"
+    <section
+      id="inicio"
+      className={`relative min-h-[92svh] md:min-h-[100svh] flex items-center justify-center pt-24 pb-12 md:pb-14 overflow-hidden transition-colors duration-500 ${
+        isDark ? 'text-white' : 'text-[#000336]'
+      }`}
     >
-      {/* Background with overlay */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1581092160562-40aa08e78837?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80)',
-            opacity: 0.15
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-[#000336]/95 via-[#000336]/80 to-[#0F4C81]/95"></div>
+      {/* Fondos distintos light / dark */}
+      <div className="absolute inset-0 transition-opacity duration-500">
+        {isDark ? (
+          <>
+            <div
+              className="absolute inset-0 bg-cover bg-center scale-105"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=2070&q=80')",
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#000336]/96 via-[#000336]/90 to-[#0F4C81]/92" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(243,112,33,0.32),transparent_52%)]" />
+            <div className="absolute -bottom-24 left-1/2 h-48 w-[80%] -translate-x-1/2 rounded-full bg-[#F37021]/25 blur-3xl" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f0] via-[#f3f7fc] to-[#e7eef8]" />
+            <div
+              className="absolute inset-0 opacity-[0.14] bg-cover bg-center"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1600&q=70')",
+              }}
+            />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(243,112,33,0.22),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(15,76,129,0.14),transparent_45%)]" />
+            <div className="absolute top-24 right-[12%] h-40 w-40 rounded-full bg-[#F37021]/15 blur-3xl" />
+            <div className="absolute bottom-16 left-[8%] h-52 w-52 rounded-full bg-[#0F4C81]/12 blur-3xl" />
+            <div className="absolute inset-0 mesh-grid opacity-40" />
+          </>
+        )}
       </div>
-      
+
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-5xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-12"
+            transition={{ duration: 0.7 }}
+            className="mb-10"
           >
-            <motion.div 
-              className="inline-flex items-center justify-center bg-white/10 backdrop-blur-sm px-6 py-2.5 rounded-full mb-8 border border-white/10"
-              initial={{ scale: 0.9, opacity: 0 }}
+            <motion.img
+              src="/img/Seprogar-Logo-03.png"
+              alt="SEPROGAR"
+              className={`mx-auto mb-8 h-12 md:h-14 w-auto drop-shadow-lg ${
+                isDark ? 'brightness-0 invert' : ''
+              }`}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+            />
+
+            <motion.div
+              className={`inline-flex items-center justify-center backdrop-blur-md px-5 py-2 rounded-full mb-7 border ${
+                isDark
+                  ? 'bg-white/10 border-white/15 text-white'
+                  : 'bg-white/80 border-[#F37021]/20 text-[#000336] shadow-sm'
+              }`}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+              transition={{ delay: 0.15, duration: 0.45 }}
             >
-              <Wrench className="mr-2 text-[#F37021]" size={18} />
-              <span className="font-medium tracking-wide">Servicios profesionales</span>
+              <Wrench className="mr-2 text-[#F37021]" size={16} />
+              <span className="text-sm font-semibold tracking-wide">
+                Instalaciones y mantenimiento profesional
+              </span>
             </motion.div>
-            
-            <motion.h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
-              initial={{ opacity: 0, y: 20 }}
+
+            <motion.h1
+              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-[1.08]"
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
+              transition={{ delay: 0.25, duration: 0.55 }}
             >
-              Soluciones técnicas <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#F37021] to-[#FF9E5E]">para tu hogar</span>
+              <span className={isDark ? 'text-white' : 'text-[#000336]'}>Soluciones técnicas</span>
+              <span className="mt-2 flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1">
+                <span className={isDark ? 'text-white' : 'text-[#000336]'}>para tu</span>
+                <span className="relative inline-flex min-w-[7.5ch] md:min-w-[9ch] justify-center pb-[0.22em] align-baseline">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={currentWord}
+                      initial={{ y: '40%', opacity: 0, filter: 'blur(4px)' }}
+                      animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
+                      exit={{ y: '-35%', opacity: 0, filter: 'blur(4px)' }}
+                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                      className="relative z-10 inline-block pb-[0.08em] text-gradient-brand"
+                      aria-live="polite"
+                    >
+                      {currentWord}
+                    </motion.span>
+                  </AnimatePresence>
+                  <span
+                    className={`pointer-events-none absolute left-0 right-0 bottom-0 h-[0.12em] rounded-full bg-gradient-to-r from-[#F37021] to-[#FF9E5E] ${
+                      isDark ? 'opacity-80' : 'opacity-90'
+                    }`}
+                    aria-hidden
+                  />
+                </span>
+              </span>
             </motion.h1>
-            
-            <motion.p 
-              className="text-xl text-gray-200 mb-12 max-w-2xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
+
+            <motion.p
+              className={`text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed ${
+                isDark ? 'text-slate-200/90' : 'text-slate-600'
+              }`}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
+              transition={{ delay: 0.35, duration: 0.55 }}
             >
-              Expertos en instalaciones y mantenimiento de gas, plomería y electricidad. Soluciones rápidas, eficientes y con garantía de satisfacción.
+              Plomería, gas, electricidad y más. Trabajo profesional, respuesta rápida y trato
+              directo en cada intervención.
             </motion.p>
-            
-            <motion.div 
-              className="flex flex-col sm:flex-row justify-center gap-5"
-              initial={{ opacity: 0, y: 20 }}
+
+            <motion.div
+              className="flex flex-col sm:flex-row justify-center gap-4"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
+              transition={{ delay: 0.45, duration: 0.55 }}
             >
-              <a 
+              <a
                 href="#servicios"
-                className="group relative overflow-hidden bg-gradient-to-r from-[#F37021] to-[#FF9E5E] hover:from-[#FF9E5E] hover:to-[#F37021] text-white px-8 py-4 rounded-full font-medium flex items-center justify-center transition-all duration-500 hover:shadow-lg hover:shadow-orange-500/30 transform hover:-translate-y-0.5"
+                className="group relative overflow-hidden bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white px-8 py-4 rounded-full font-semibold flex items-center justify-center shadow-brand transition-transform duration-300 hover:-translate-y-0.5"
               >
                 <span className="relative z-10 flex items-center">
-                  Nuestros servicios
-                  <ChevronRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                  Ver servicios
+                  <ChevronRight className="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
-                <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               </a>
-              
-              <a 
+
+              <a
                 href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20presupuesto"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative overflow-hidden bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-medium flex items-center justify-center transition-all duration-500 border border-white/20 hover:border-white/40 hover:shadow-lg hover:shadow-white/10 transform hover:-translate-y-0.5"
+                className={`group px-8 py-4 rounded-full font-semibold flex items-center justify-center border transition-all duration-300 hover:-translate-y-0.5 ${
+                  isDark
+                    ? 'bg-white/10 hover:bg-white/18 backdrop-blur-md text-white border-white/25'
+                    : 'bg-white hover:bg-[#fff7f0] text-[#000336] border-[#000336]/12 shadow-md'
+                }`}
               >
-                <span className="relative z-10 flex items-center">
-                  <Phone className="mr-2" size={18} />
-                  Solicitar presupuesto
-                </span>
-                <span className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <Phone className="mr-2" size={18} />
+                Pedir presupuesto
               </a>
             </motion.div>
           </motion.div>
-          
-          {/* Stats */}
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24"
-            initial={{ opacity: 0, y: 30 }}
+
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-10 md:mt-14"
+            initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.7, delay: 0.55 }}
           >
             {[
-              { number: '5+', label: 'Años de experiencia' },
-              { number: '500+', label: 'Clientes satisfechos' },
-              { number: '24/7', label: 'Servicio de emergencia' },
-              { number: '100%', label: 'Garantía de trabajo' },
-            ].map((stat, index) => (
-              <motion.div 
-                key={index} 
-                className="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-300 hover:shadow-lg hover:shadow-white/5"
-                whileHover={{ y: -5, scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              { number: '5+', label: 'Años de experiencia', icon: ShieldCheck },
+              { number: '500+', label: 'Clientes atendidos', icon: null },
+              { number: '24/7', label: 'Emergencias', icon: Clock3 },
+              { number: 'CABA', label: 'y GBA', icon: null },
+            ].map((stat) => (
+              <motion.div
+                key={stat.label}
+                className={`text-center p-5 md:p-6 rounded-2xl border backdrop-blur-md transition-colors ${
+                  isDark
+                    ? 'border-white/10 bg-white/5 hover:bg-white/10'
+                    : 'border-white/80 bg-white/70 hover:bg-white shadow-sm'
+                }`}
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 380, damping: 18 }}
               >
-                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#F37021] to-[#FF9E5E] mb-3">{stat.number}</div>
-                <div className="text-sm text-gray-300 font-medium">{stat.label}</div>
+                {stat.icon ? (
+                  <stat.icon className="mx-auto mb-2 h-5 w-5 text-[#F37021]" />
+                ) : (
+                  <div className="mx-auto mb-2 h-5" />
+                )}
+                <div className="font-display text-3xl md:text-4xl font-bold text-gradient-brand mb-1">
+                  {stat.number}
+                </div>
+                <div
+                  className={`text-xs md:text-sm font-medium ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}
+                >
+                  {stat.label}
+                </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </div>
-      
-      {/* Scroll indicator removed */}
     </section>
   );
 };

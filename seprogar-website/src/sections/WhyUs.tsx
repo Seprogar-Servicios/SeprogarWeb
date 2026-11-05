@@ -1,142 +1,127 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Award, ShieldCheck, Clock3, CheckCircle, Phone, Users } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ShieldCheck, Clock3, Users2, Phone, Sparkles, Camera } from 'lucide-react';
 
-const features = [
+/** Cuando tengas la foto, ponela en public/img/ y actualizá esta ruta. */
+const TEAM_PHOTO_SRC: string | null = null;
+// Ejemplo: '/img/Seprogar-Equipo.jpg'
+
+const highlights = [
   {
-    icon: <Award className="w-6 h-6" />,
-    title: 'Experiencia',
-    description: 'Más de 10 años de experiencia en el rubro, garantizando trabajos de calidad y satisfacción del cliente.',
-    gradient: 'from-blue-600 to-blue-800'
+    icon: ShieldCheck,
+    title: 'Criterio técnico',
+    description: 'Priorizamos seguridad y normativa en instalaciones sensibles como gas y electricidad.',
   },
   {
-    icon: <ShieldCheck className="w-6 h-6" />,
-    title: 'Seguridad',
-    description: 'Técnicos certificados y habilitados, cumpliendo con todas las normas de seguridad vigentes.',
-    gradient: 'from-blue-700 to-blue-900'
+    icon: Clock3,
+    title: 'Respuesta ágil',
+    description: 'Coordinamos según urgencia. Emergencias se evalúan al momento por WhatsApp.',
   },
   {
-    icon: <Clock3 className="w-6 h-6" />,
-    title: 'Rapidez',
-    description: 'Servicio de emergencias 24/7. Llegamos a tiempo y solucionamos tu problema rápidamente.',
-    gradient: 'from-orange-500 to-amber-500'
+    icon: Users2,
+    title: 'Trato directo',
+    description: 'Hablás con el equipo que interviene: comunicación clara de punta a punta.',
   },
-  {
-    icon: <CheckCircle className="w-6 h-6" />,
-    title: 'Garantía',
-    description: 'Todos nuestros trabajos cuentan con garantía escrita. Estamos seguros de nuestro servicio.',
-    gradient: 'from-orange-600 to-red-500'
-  }
 ] as const;
 
 export const WhyUs = () => {
   return (
-    <section id="nosotros" className="relative py-24 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-3 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAzMzYiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')]"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
-          <div className="inline-flex items-center justify-center bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-            <Users className="w-4 h-4 mr-2" />
-            <span>Sobre Nosotros</span>
-          </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            ¿Por qué elegir <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#F37021] to-[#FF9E5E]">SEPROGAR</span>?
-          </h2>
-          
-          <div className="w-24 h-1.5 bg-gradient-to-r from-[#F37021] to-[#FF9E5E] rounded-full mx-auto mb-6"></div>
-          
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            En SEPROGAR nos enorgullece ofrecer soluciones técnicas integrales con los más altos estándares de calidad y profesionalismo.
-          </p>
-        </motion.div>
+    <section id="nosotros" className="relative py-14 md:py-16 overflow-hidden">
+      <div className="absolute inset-0 bg-surface/70" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <AnimatePresence>
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: index * 0.1,
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 15
-                }}
-                whileHover={{ y: -10 }}
-                className="group relative h-full"
-              >
-                <div className="absolute inset-0.5 bg-gradient-to-br from-white to-gray-50 rounded-2xl group-hover:opacity-0 transition-opacity duration-300 z-0"></div>
-                <div className="relative z-10 h-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 group-hover:shadow-2xl transition-all duration-500 flex flex-col">
-                  <div className={`h-1.5 bg-gradient-to-r ${feature.gradient}`}></div>
-                  
-                  <div className="p-8 flex-1 flex flex-col">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} text-white flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 mx-auto`}>
-                      {feature.icon}
-                    </div>
-                    
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{feature.title}</h3>
-                    <p className="text-gray-600 text-center">{feature.description}</p>
-                  </div>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid gap-5 lg:grid-cols-2 lg:gap-6 lg:items-stretch mb-5 md:mb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55 }}
+            className="rounded-3xl border border-theme bg-surface-elevated p-6 md:p-8 flex flex-col justify-center"
+          >
+            <div className="inline-flex items-center bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white text-xs font-semibold px-3 py-1 rounded-full mb-4 shadow-brand w-fit">
+              <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+              La empresa
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-extrabold text-foreground mb-4 leading-tight">
+              SEPROGAR, soluciones técnicas con foco en el día a día
+            </h2>
+            <p className="text-muted text-sm md:text-base leading-relaxed mb-4">
+              Somos un equipo de oficios e instalaciones para hogar, comercio y edificios. Trabajamos
+              plomería, gas, electricidad, aires y pintura con una idea simple: diagnosticar bien y
+              ejecutar con orden.
+            </p>
+            <p className="text-muted text-sm md:text-base leading-relaxed mb-6">
+              No vendemos paquetes genéricos: cada caso se evalúa según el lugar, la urgencia y lo que
+              realmente hace falta para dejar el sistema funcionando.
+            </p>
+            <a
+              href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20conocer%20más%20sobre%20ustedes"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F37021] to-[#FF9E5E] px-5 py-3 text-sm font-semibold text-white shadow-brand hover:brightness-105 transition w-fit"
+            >
+              <Phone className="h-4 w-4" />
+              Hablar con el equipo
+            </a>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, delay: 0.08 }}
+            className="relative overflow-hidden rounded-3xl border border-theme bg-surface min-h-[240px] md:min-h-full"
+          >
+            {TEAM_PHOTO_SRC ? (
+              <img
+                src={TEAM_PHOTO_SRC}
+                alt="Equipo SEPROGAR"
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[#000336] via-[#0F4C81] to-[#000336] p-6 text-center">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(243,112,33,0.35),transparent_50%)]" />
+                <div className="relative z-10 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 border border-white/15 text-[#FF9E5E]">
+                  <Camera className="h-6 w-6" />
                 </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                <div className="relative z-10">
+                  <p className="font-display text-lg font-bold text-white mb-1">Foto del equipo</p>
+                  <p className="text-sm text-white/70 max-w-xs leading-relaxed">
+                    Espacio reservado. Cuando tengas la imagen, la reemplazamos acá.
+                  </p>
+                </div>
+              </div>
+            )}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#000336]/50 to-transparent" />
+            <p className="absolute bottom-4 left-4 right-4 z-10 font-display text-sm font-semibold text-white drop-shadow">
+              El equipo detrás de cada servicio
+            </p>
+          </motion.div>
         </div>
 
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-24 relative rounded-2xl overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#000336] to-[#0F4C81] opacity-95"></div>
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-mosaic.png')] opacity-10"></div>
-          
-          <div className="relative z-10 p-8 md:p-12 lg:p-16 text-center">
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="max-w-4xl mx-auto"
-            >
-              <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6">
-                ¿Necesitas ayuda con algún servicio?
-              </h3>
-              <p className="text-gray-200 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-                Nuestro equipo de expertos está listo para atender tus necesidades las 24 horas del día, los 7 días de la semana.
-              </p>
-              
-              <motion.a
-                href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20necesito%20contactarlos"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center bg-gradient-to-r from-[#F37021] to-[#FF9E5E] hover:from-[#FF9E5E] hover:to-[#F37021] text-white px-8 py-4 rounded-full font-medium transition-all duration-500 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+        <div className="grid gap-3 sm:grid-cols-3">
+          {highlights.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.06 }}
+                className="flex gap-3 rounded-2xl border border-theme bg-surface p-4"
               >
-                <Phone className="w-5 h-5 mr-2" />
-                <span>Contáctanos ahora</span>
-                <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </motion.a>
-            </motion.div>
-          </div>
-        </motion.div>
+                <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#000336] text-[#FF9E5E]">
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div>
+                  <h3 className="font-display text-sm font-bold text-foreground mb-0.5">{item.title}</h3>
+                  <p className="text-xs text-muted leading-relaxed">{item.description}</p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

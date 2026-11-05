@@ -11,6 +11,16 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.local
+.env.*.local
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+
+# Generados por scripts SEO
+scripts/.prerender-routes.json
 
 # Editor directories and files
 .vscode/*

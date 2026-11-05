@@ -1,0 +1,15 @@
+{
+  "rewrites": [
+    { "source": "/((?!assets/|img/|sitemap\\.xml|robots\\.txt).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/gestion-seprogar/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/gestion-seprogar",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
+  ]
+}

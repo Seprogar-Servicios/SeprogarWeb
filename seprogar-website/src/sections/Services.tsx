@@ -1,174 +1,108 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Wrench, Droplets, Zap, CheckCircle, ArrowRight, Wind, Brush } from 'lucide-react';
-import type { ServiceCardProps } from '../types';
-
-const services: ServiceCardProps[] = [
-  {
-    icon: <Droplets className="w-8 h-8" />,
-    title: 'Plomería',
-    description: 'Soluciones integrales para tus necesidades de fontanería',
-    items: [
-      'Reparación de fugas',
-      'Instalaciones sanitarias',
-      'Destapaciones',
-      'Mantenimiento preventivo',
-      'Atención de emergencias 24/7'
-    ],
-    gradient: 'from-blue-600 to-blue-800'
-  },
-  {
-    icon: <Wrench className="w-8 h-8" />,
-    title: 'Gas',
-    description: 'Instalaciones seguras y certificadas',
-    items: [
-      'Instalaciones de gas natural y envasado',
-      'Detección de fugas',
-      'Mantenimiento de instalaciones',
-      'Habilitación de instalaciones',
-      'Certificaciones'
-    ],
-    gradient: 'from-orange-500 to-amber-500'
-  },
-  {
-    icon: <Zap className="w-8 h-8" />,
-    title: 'Electricidad',
-    description: 'Soluciones eléctricas profesionales',
-    items: [
-      'Instalaciones eléctricas',
-      'Reparación de cortocircuitos',
-      'Actualización de tableros',
-      'Instalación de luminarias',
-      'Mantenimiento industrial'
-    ],
-    gradient: 'from-yellow-400 to-yellow-600'
-  },
-  {
-    icon: <Wind className="w-8 h-8" />,
-    title: 'Aires Acondicionados',
-    description: 'Instalación y mantenimiento de sistemas de climatización',
-    items: [
-      'Instalación de equipos split',
-      'Mantenimiento preventivo',
-      'Recarga de gas refrigerante',
-      'Reparación de fugas',
-      'Asesoramiento técnico'
-    ],
-    gradient: 'from-blue-700 to-blue-900'
-  },
-  {
-    icon: <Brush className="w-8 h-8" />,
-    title: 'Pintura General',
-    description: 'Servicios profesionales de pintura para interiores y exteriores',
-    items: [
-      'Pintura de interiores',
-      'Pintura de exteriores',
-      'Preparación de superficies',
-      'Reparación de paredes',
-      'Asesoramiento de colores'
-    ],
-    gradient: 'from-purple-500 to-purple-700'
-  }
-];
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowUpRight, Wrench } from 'lucide-react';
+import { fetchEspecialidadesPublicas } from '../lib/api/especialidades';
+import { getPublicMediaUrl } from '../lib/supabase';
+import type { Especialidad } from '../types/database';
+import { EmptyState } from '../components/ui/EmptyState';
+import { Spinner } from '../components/ui/Spinner';
 
 export const Services = () => {
-  return (
-    <section id="servicios" className="relative py-24 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-3 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAzMzYiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')]"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
-          <div className="inline-flex items-center justify-center bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-            <Wrench className="w-4 h-4 mr-2" />
-            <span>Servicios Profesionales</span>
-          </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Nuestros <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#F37021] to-[#FF9E5E]">Servicios</span>
-          </h2>
-          
-          <div className="w-24 h-1.5 bg-gradient-to-r from-[#F37021] to-[#FF9E5E] rounded-full mx-auto mb-6"></div>
-          
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Soluciones integrales y profesionales para todas tus necesidades técnicas, con la más alta calidad y garantía de satisfacción.
-          </p>
-        </motion.div>
+  const [items, setItems] = useState<Especialidad[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-          <AnimatePresence>
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: index * 0.1,
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 15
-                }}
-                whileHover={{ y: -10 }}
-                className="group relative h-full"
-              >
-                <div className="absolute inset-0.5 bg-gradient-to-br from-white to-gray-50 rounded-2xl group-hover:opacity-0 transition-opacity duration-300 z-0"></div>
-                <div className="relative z-10 h-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 group-hover:shadow-2xl transition-all duration-500 flex flex-col">
-                  <div className={`h-2 bg-gradient-to-r ${service.gradient}`}></div>
-                  
-                  <div className="p-8 flex-1 flex flex-col">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} text-white flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                      {service.icon}
-                    </div>
-                    
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-6">{service.description}</p>
-                    
-                    <div className="flex-1">
-                      <ul className="space-y-3 mb-8">
-                        {service.items.map((item, i) => (
-                          <motion.li 
-                            key={i} 
-                            className="flex items-start"
-                            initial={{ opacity: 0, x: -10 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.4 + (i * 0.05) }}
-                          >
-                            <CheckCircle className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 text-${service.gradient.split(' ')[1].replace('to-', '')}`} />
-                            <span className="text-gray-700">{item}</span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <motion.div 
-                      className="mt-auto pt-6 border-t border-gray-100"
-                      whileHover={{ x: 5 }}
-                      transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                    >
-                      <a 
-                        href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20servicio"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center font-medium text-gray-900 hover:text-[#F37021] transition-colors group"
-                      >
-                        <span className="mr-2">Solicitar servicio</span>
-                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      </a>
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await fetchEspecialidadesPublicas();
+        if (!cancelled) setItems(data);
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'No se pudieron cargar los servicios.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <section id="servicios" className="relative py-14 md:py-16 overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="mb-7 md:mb-8 max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#F37021] mb-2">
+            Servicios
+          </p>
+          <h2 className="font-display text-3xl md:text-4xl font-extrabold text-foreground mb-2">
+            Nuestros servicios
+          </h2>
+          <p className="text-sm md:text-base text-muted leading-relaxed">
+            Especialidades disponibles. Entrá al detalle para ver trabajos realizados.
+          </p>
         </div>
+
+        {loading ? <Spinner label="Cargando especialidades…" /> : null}
+        {error ? <EmptyState title="No pudimos cargar el catálogo" description={error} /> : null}
+        {!loading && !error && items.length === 0 ? (
+          <EmptyState
+            title="Pronto vas a ver nuestras especialidades"
+            description="Estamos preparando el catálogo de servicios."
+          />
+        ) : null}
+
+        {!loading && !error && items.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+            {items.map((item, index) => {
+              const imageUrl = getPublicMediaUrl(item.imagen_portada);
+              return (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-30px' }}
+                  transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.2) }}
+                >
+                  <Link
+                    to={`/servicios/${item.slug}`}
+                    className="group block rounded-2xl border border-theme bg-surface overflow-hidden transition-colors hover:border-[#F37021]/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F37021] focus-visible:ring-offset-2"
+                  >
+                    <div className="relative aspect-[3/2] overflow-hidden bg-slate-100 dark:bg-slate-800">
+                      {imageUrl ? (
+                        <img
+                          src={imageUrl}
+                          alt={`Servicio de ${item.nombre} — SEPROGAR`}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-[#000336]/90 to-[#0F4C81] text-white/80">
+                          <Wrench className="w-7 h-7" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between gap-2 px-3.5 py-3">
+                      <div className="min-w-0">
+                        <h3 className="font-display text-sm md:text-base font-bold text-foreground truncate group-hover:text-[#F37021] transition-colors">
+                          {item.nombre}
+                        </h3>
+                        {item.descripcion_breve ? (
+                          <p className="mt-0.5 text-xs text-muted line-clamp-1">{item.descripcion_breve}</p>
+                        ) : null}
+                      </div>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-muted group-hover:text-[#F37021] transition-colors" />
+                    </div>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
     </section>
   );

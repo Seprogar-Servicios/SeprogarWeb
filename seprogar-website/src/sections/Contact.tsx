@@ -47,7 +47,7 @@ const encodedMessage = encodeURIComponent(message);
   };
 
   return (
-    <section id="contacto" className="relative py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+    <section id="contacto" className="relative py-14 md:py-16 overflow-hidden">
       {/* Elementos decorativos */}
       <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#F37021]/10 rounded-full mix-blend-multiply filter blur-3xl"></div>
       <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-[#000336]/10 rounded-full mix-blend-multiply filter blur-3xl"></div>
@@ -60,15 +60,15 @@ const encodedMessage = encodeURIComponent(message);
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-[#F37021] text-sm font-medium mb-3 px-3 py-1 bg-orange-50 rounded-full">
+          <span className="inline-block text-[#F37021] text-sm font-medium mb-3 px-3 py-1 bg-orange-50 dark:bg-orange-500/10 rounded-full">
             Contacto
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-sans">
-            Contácta<span className="text-[#F37021]">nos</span>
+          <h2 className="font-display text-4xl md:text-5xl font-extrabold text-foreground mb-4">
+            Contácta<span className="text-gradient-brand">nos</span>
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-[#F37021] to-orange-400 mx-auto mb-6 rounded-full"></div>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-        Estamos listos para atenderte. Completa el formulario y nos pondremos en contacto contigo a la brevedad.
+          <p className="text-muted max-w-2xl mx-auto text-lg">
+        Estamos listos para atenderte. Completá el formulario y te respondemos a la brevedad.
       </p>
     </motion.div>
 
@@ -81,19 +81,19 @@ const encodedMessage = encodeURIComponent(message);
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full"
+          className="bg-surface p-8 rounded-3xl shadow-xl border border-theme hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full"
         >
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Envíanos un mensaje</h3>
-          <p className="text-gray-500">Estamos aquí para responder cualquier pregunta que tengas.</p>
+          <h3 className="font-display text-2xl font-bold text-foreground mb-2">Envianos un mensaje</h3>
+          <p className="text-muted">Estamos para responder cualquier consulta.</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-1">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre completo</label>
+            <label htmlFor="name" className="block text-sm font-medium text-foreground">Nombre completo</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
@@ -103,7 +103,7 @@ const encodedMessage = encodeURIComponent(message);
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200"
+                className="block w-full pl-10 pr-4 py-3 rounded-lg border border-theme bg-surface-elevated text-foreground placeholder:text-muted focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200"
                 placeholder="Tu nombre completo"
                 required
               />
@@ -112,10 +112,10 @@ const encodedMessage = encodeURIComponent(message);
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-1">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo electrónico</label>
+              <label htmlFor="email" className="block text-sm font-medium text-foreground">Correo electrónico</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2z" />
                   </svg>
                 </div>
@@ -125,7 +125,7 @@ const encodedMessage = encodeURIComponent(message);
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200"
+                  className="block w-full pl-10 pr-4 py-3 rounded-lg border border-theme bg-surface-elevated text-foreground placeholder:text-muted focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200"
                   placeholder="tucorreo@ejemplo.com"
                   required
                 />
@@ -133,10 +133,10 @@ const encodedMessage = encodeURIComponent(message);
             </div>
             
             <div className="space-y-1">
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Teléfono</label>
+              <label htmlFor="phone" className="block text-sm font-medium text-foreground">Teléfono</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                 </div>
@@ -146,7 +146,7 @@ const encodedMessage = encodeURIComponent(message);
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200"
+                  className="block w-full pl-10 pr-4 py-3 rounded-lg border border-theme bg-surface-elevated text-foreground placeholder:text-muted focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200"
                   placeholder="Tu número de teléfono"
                   required
                 />
@@ -155,10 +155,10 @@ const encodedMessage = encodeURIComponent(message);
           </div>
           
           <div className="space-y-1">
-            <label htmlFor="message" className="block text-sm font-medium text-gray-700">Mensaje</label>
+            <label htmlFor="message" className="block text-sm font-medium text-foreground">Mensaje</label>
             <div className="relative">
               <div className="absolute top-3 left-3">
-                <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
@@ -168,7 +168,7 @@ const encodedMessage = encodeURIComponent(message);
                 rows={4}
                 value={formData.message}
                 onChange={handleInputChange}
-                className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200 resize-none"
+                className="block w-full pl-10 pr-4 py-3 rounded-lg border border-theme bg-surface-elevated text-foreground placeholder:text-muted focus:ring-2 focus:ring-[#F37021]/50 focus:border-[#F37021] transition-all duration-200 resize-none"
                 placeholder="Cuéntanos cómo podemos ayudarte..."
                 required
               ></textarea>
@@ -178,7 +178,7 @@ const encodedMessage = encodeURIComponent(message);
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-[#F37021] to-orange-500 text-white py-4 px-6 rounded-xl hover:shadow-lg hover:shadow-orange-100 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-3 font-semibold text-lg"
+              className="w-full bg-gradient-to-r from-[#F37021] to-orange-500 text-white py-4 px-6 rounded-xl hover:shadow-lg hover:shadow-[#F37021]/20 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-3 font-semibold text-lg"
             >
               <Send size={20} className="transform -rotate-12" />
               Enviar mensaje
@@ -195,21 +195,21 @@ const encodedMessage = encodeURIComponent(message);
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex flex-col h-full"
         >
-          <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300 flex-1">
+          <div className="bg-surface p-8 rounded-3xl shadow-xl border border-theme hover:shadow-2xl transition-shadow duration-300 flex-1">
           <div className="mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Información de contacto</h3>
-            <p className="text-gray-500">Estamos disponibles para atenderte en los siguientes canales</p>
+            <h3 className="font-display text-2xl font-bold text-foreground mb-2">Información de contacto</h3>
+            <p className="text-muted">Canales disponibles para atenderte</p>
           </div>
           
           <div className="space-y-6">
             {/* Dirección */}
             <div className="flex items-start">
-              <div className="flex-shrink-0 bg-gradient-to-br from-[#F37021]/10 to-orange-100 p-3 rounded-xl">
+              <div className="flex-shrink-0 bg-[#F37021]/15 dark:bg-[#F37021]/20 p-3 rounded-xl">
                 <MapPin className="h-6 w-6 text-[#F37021]" />
               </div>
               <div className="ml-4">
-                <h4 className="font-semibold text-gray-900 text-lg">Dirección</h4>
-                <p className="text-gray-600 mt-1">Av. Siempreviva 742, Buenos Aires</p>
+                <h4 className="font-semibold text-foreground text-lg">Dirección</h4>
+                <p className="text-muted mt-1">Av. Siempreviva 742, Buenos Aires</p>
                 <a href="#" className="inline-flex items-center text-[#F37021] hover:underline mt-2 text-sm font-medium">
                   Ver en el mapa
                   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,45 +221,45 @@ const encodedMessage = encodeURIComponent(message);
             
             {/* Email */}
             <div className="flex items-start">
-              <div className="flex-shrink-0 bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-xl">
+              <div className="flex-shrink-0 bg-blue-500/10 dark:bg-blue-500/20 p-3 rounded-xl">
                 <Mail className="h-6 w-6 text-blue-500" />
               </div>
               <div className="ml-4">
-                <h4 className="font-semibold text-gray-900 text-lg">Correo electrónico</h4>
-                <a href="mailto:contacto@seprogar.com" className="text-gray-600 hover:text-[#F37021] transition-colors duration-200 mt-1 block">contacto@seprogar.com</a>
-                <p className="text-sm text-gray-500 mt-2">Respuesta en menos de 24 horas</p>
+                <h4 className="font-semibold text-foreground text-lg">Correo electrónico</h4>
+                <a href="mailto:contacto@seprogar.com" className="text-muted hover:text-[#F37021] transition-colors duration-200 mt-1 block">contacto@seprogar.com</a>
+                <p className="text-sm text-muted mt-2">Respuesta en menos de 24 horas</p>
               </div>
             </div>
             
             {/* Teléfono */}
             <div className="flex items-start">
-              <div className="flex-shrink-0 bg-gradient-to-br from-green-50 to-green-100 p-3 rounded-xl">
+              <div className="flex-shrink-0 bg-green-500/10 dark:bg-green-500/20 p-3 rounded-xl">
                 <Phone className="h-6 w-6 text-green-500" />
               </div>
               <div className="ml-4">
-                <h4 className="font-semibold text-gray-900 text-lg">Teléfono</h4>
-                <a href="tel:+5491128484962" className="text-gray-900 hover:text-[#F37021] transition-colors text-lg font-medium">
+                <h4 className="font-semibold text-foreground text-lg">Teléfono</h4>
+                <a href="tel:+5491128484962" className="text-foreground hover:text-[#F37021] transition-colors text-lg font-medium">
                   +54 9 11 2848-4962
                 </a>
-                <p className="text-sm text-gray-500 mt-1">Lun a Dom: 8:00 - 18:00</p>
+                <p className="text-sm text-muted mt-1">Lun a Dom: 8:00 - 18:00</p>
               </div>
             </div>
           </div>
           
-          <div className="mt-10 pt-6 border-t border-gray-100">
-            <h4 className="font-semibold text-gray-900 text-lg mb-4">Horario de atención</h4>
+          <div className="mt-10 pt-6 border-t border-theme">
+            <h4 className="font-semibold text-foreground text-lg mb-4">Horario de atención</h4>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="font-medium text-gray-900">Lunes - Domingos</p>
-                <p className="text-gray-600">8:00 - 18:00</p>
+              <div className="bg-surface-elevated border border-theme p-4 rounded-xl">
+                <p className="font-medium text-foreground">Lunes - Domingos</p>
+                <p className="text-muted">8:00 - 18:00</p>
               </div>
-              <div className="bg-gray-50 p-4 rounded-xl">
-                <p className="font-medium text-gray-900">Atención regular</p>
-                <p className="text-gray-600">8:00 - 18:00</p>
+              <div className="bg-surface-elevated border border-theme p-4 rounded-xl">
+                <p className="font-medium text-foreground">Atención regular</p>
+                <p className="text-muted">8:00 - 18:00</p>
               </div>
-              <div className="bg-gray-50 p-4 rounded-xl col-span-2">
-                <p className="font-medium text-gray-900">Emergencias</p>
-                <p className="text-gray-600">Atención 24/7</p>
+              <div className="bg-surface-elevated border border-theme p-4 rounded-xl col-span-2">
+                <p className="font-medium text-foreground">Emergencias</p>
+                <p className="text-muted">Atención 24/7</p>
               </div>
             </div>
           </div>

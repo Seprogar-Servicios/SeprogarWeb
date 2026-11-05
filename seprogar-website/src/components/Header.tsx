@@ -1,31 +1,63 @@
-import { useState, useEffect } from 'react';
-import { Menu, X, Phone, Home, Wrench, Users, Briefcase, MessageSquare } from 'lucide-react';
+import { useState, useEffect, type MouseEvent } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import {
+  Menu,
+  X,
+  Phone,
+  Home,
+  Wrench,
+  Users,
+  UserRound,
+  MessageSquare,
+  ListOrdered,
+  MapPin,
+  CircleHelp,
+} from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ThemeToggle } from './ThemeToggle';
+import { useTheme } from '../contexts/ThemeContext';
+import { useHasEquipo } from '../hooks/useHasEquipo';
+import { scrollToSection } from '../lib/scroll';
 
 const navLinks = [
   { href: '#inicio', label: 'Inicio', icon: Home },
   { href: '#servicios', label: 'Servicios', icon: Wrench },
+  { href: '#proceso', label: 'Proceso', icon: ListOrdered },
   { href: '#nosotros', label: 'Nosotros', icon: Users },
-  { href: '#trabajos', label: 'Trabajos', icon: Briefcase },
+  { href: '#equipo', label: 'Equipo', icon: UserRound },
+  { href: '#zonas', label: 'Zonas', icon: MapPin },
+  { href: '#faq', label: 'FAQ', icon: CircleHelp },
   { href: '#contacto', label: 'Contacto', icon: MessageSquare },
 ] as const;
+
+function sectionHref(hash: string, pathname: string) {
+  return pathname === '/' ? hash : `/${hash}`;
+}
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const location = useLocation();
+  const { isDark } = useTheme();
+  const { hasEquipo } = useHasEquipo();
+  const onHome = location.pathname === '/';
+  /** Solo en dark el hero es oscuro: el nav va en blanco. En light usa colores normales. */
+  const overDarkHero = onHome && !isScrolled && isDark;
+  const visibleLinks = navLinks.filter((link) => link.href !== '#equipo' || hasEquipo);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-      
-      // Actualizar sección activa
+
+      if (!onHome) return;
+
       const sections = document.querySelectorAll('section[id]');
       let currentActiveSection = '';
 
       sections.forEach((section) => {
         const element = section as HTMLElement;
-        const sectionTop = element.offsetTop - 120; // Offset más grande para header fijo
+        const sectionTop = element.offsetTop - 120;
         const sectionHeight = element.offsetHeight;
         const sectionId = element.getAttribute('id');
 
@@ -34,148 +66,144 @@ export const Header = () => {
         }
       });
 
-      if (currentActiveSection !== activeSection) {
-        setActiveSection(currentActiveSection);
-      }
+      setActiveSection((prev) => (currentActiveSection !== prev ? currentActiveSection : prev));
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Llamar una vez al cargar
-    
+    handleScroll();
+
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [onHome]);
 
   const isActive = (href: string) => activeSection === href;
 
+  const linkIdle = overDarkHero
+    ? 'text-white/90 hover:text-white'
+    : 'text-foreground/80 hover:text-[#F37021]';
+
+  /** Fuerza scroll aunque el hash de la URL ya sea el mismo (p. ej. #inicio). */
+  function handleSectionClick(event: MouseEvent<HTMLAnchorElement>, hash: string) {
+    if (location.pathname !== '/') return;
+    event.preventDefault();
+    scrollToSection(hash);
+    if (window.location.hash !== hash) {
+      window.history.pushState(null, '', `/${hash}`);
+    }
+    setIsMenuOpen(false);
+  }
+
   return (
-    <header 
+    <header
       className={`fixed w-full z-50 transition-all duration-500 ${
-        isScrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-lg py-2' 
-          : 'bg-gradient-to-b from-black/10 to-transparent py-4'
+        isScrolled
+          ? 'bg-surface/90 backdrop-blur-xl shadow-[0_10px_40px_-20px_rgba(0,0,0,0.35)] border-b border-theme py-2'
+          : overDarkHero
+            ? 'bg-gradient-to-b from-black/35 to-transparent py-4'
+            : 'bg-gradient-to-b from-white/70 to-transparent backdrop-blur-[2px] py-4'
       }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          {/* Logo con animación */}
-          <motion.a 
-            href="#inicio" 
-            className="flex items-center space-x-3 group"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+          <Link
+            to="/#inicio"
+            className="flex items-center space-x-3"
+            onClick={(e) => handleSectionClick(e, '#inicio')}
           >
-            <motion.img 
-              src="/img/Seprogar-Logo-02.png"
-              alt="Seprogar Icon"
-              className="h-10 w-auto"
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-            />
-            <motion.img 
+            <img src="/img/Seprogar-Logo-02.png" alt="Seprogar" className="h-10 w-auto" />
+            <img
               src="/img/Seprogar-Logo-03.png"
-              alt="Seprogar"
-              className="h-8 w-auto"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
+              alt="SEPROGAR"
+              className={`h-8 w-auto transition-all ${overDarkHero ? 'brightness-0 invert' : ''}`}
             />
-          </motion.a>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {navLinks.map(({ href, label, icon: Icon }) => (
-              <div key={href} className="relative group">
-                <a
-                  href={href}
-                  className={`flex items-center px-3 py-2 text-sm font-medium transition-all duration-300 ${
-                    isActive(href) 
-                      ? 'text-[#F37021]' 
-                      : 'text-gray-700 hover:text-[#F37021]'
+          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
+            {visibleLinks.map(({ href, label, icon: Icon }) => (
+              <div key={href} className="relative">
+                <Link
+                  to={sectionHref(href, location.pathname)}
+                  onClick={(e) => handleSectionClick(e, href)}
+                  className={`flex items-center px-2.5 py-2 text-sm font-semibold transition-colors ${
+                    isActive(href) ? 'text-[#F37021]' : linkIdle
                   }`}
                 >
-                  <Icon className="w-5 h-5 mr-2" />
+                  <Icon className="w-4 h-4 mr-1.5 opacity-80 hidden xl:inline" />
                   {label}
-                </a>
-                {isActive(href) && (
-                  <motion.div 
+                </Link>
+                {isActive(href) ? (
+                  <motion.div
                     layoutId="activeNav"
-                    className="absolute bottom-0 left-0 w-full h-0.5 bg-[#F37021]"
-                    initial={false}
-                    transition={{
-                      type: 'spring',
-                      stiffness: 500,
-                      damping: 30
-                    }}
+                    className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#F37021] rounded-full"
+                    transition={{ type: 'spring', stiffness: 500, damping: 32 }}
                   />
-                )}
+                ) : null}
               </div>
             ))}
-            <motion.a
+            <ThemeToggle lightOnDark={overDarkHero} />
+            <a
               href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20presupuesto"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gradient-to-r from-[#F37021] to-orange-500 text-white px-6 py-2.5 rounded-full font-medium flex items-center space-x-2 shadow-lg hover:shadow-orange-200 transition-all duration-300 hover:scale-105"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
+              className="ml-1 bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 shadow-brand hover:brightness-105 transition"
             >
-              <Phone size={16} className="animate-pulse" />
-              <span>Solicitar presupuesto</span>
-            </motion.a>
+              <Phone size={15} />
+              <span>Presupuesto</span>
+            </a>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <motion.button 
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Menú de navegación"
-          >
-            {isMenuOpen ? (
-              <X size={28} className="text-gray-700" />
-            ) : (
-              <Menu size={28} className="text-gray-700" />
-            )}
-          </motion.button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <ThemeToggle lightOnDark={overDarkHero} />
+            <button
+              type="button"
+              className={`p-2 rounded-full transition-colors ${
+                overDarkHero ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-black/5'
+              }`}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Menú de navegación"
+            >
+              {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
-          {isMenuOpen && (
+          {isMenuOpen ? (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden"
+              transition={{ duration: 0.25 }}
+              className="lg:hidden overflow-hidden"
             >
-              <div className="pt-4 pb-6 space-y-3">
-                {navLinks.map(({ href, label, icon: Icon }) => (
-                  <a
+              <div className="mt-3 rounded-2xl border border-theme bg-surface/95 backdrop-blur-xl p-3 space-y-1 shadow-xl">
+                {visibleLinks.map(({ href, label, icon: Icon }) => (
+                  <Link
                     key={href}
-                    href={href}
-                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                    to={sectionHref(href, location.pathname)}
+                    className={`flex items-center px-4 py-3 rounded-xl transition-colors ${
                       isActive(href)
-                        ? 'bg-[#F37021]/10 text-[#F37021] font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        ? 'bg-[#F37021]/12 text-[#F37021] font-semibold'
+                        : 'text-foreground hover:bg-black/5 dark:hover:bg-white/5'
                     }`}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={(e) => handleSectionClick(e, href)}
                   >
                     <Icon className="w-5 h-5 mr-3" />
                     {label}
-                  </a>
+                  </Link>
                 ))}
                 <a
                   href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20presupuesto"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center mt-4 bg-gradient-to-r from-[#F37021] to-orange-500 text-white px-6 py-3 rounded-full font-medium shadow-lg hover:shadow-orange-200 transition-all duration-300"
+                  className="flex items-center justify-center mt-2 bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white px-6 py-3 rounded-full font-semibold"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Phone size={18} className="mr-2 animate-pulse" />
-                  <span>Solicitar presupuesto</span>
+                  <Phone size={18} className="mr-2" />
+                  Solicitar presupuesto
                 </a>
               </div>
             </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>
       </div>
     </header>

@@ -1,57 +1,49 @@
-import { useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { Header } from './components/Header';
-import { Hero } from './sections/Hero';
-import { Services } from './sections/Services';
-import { WhyUs } from './sections/WhyUs';
-import { Gallery } from './sections/Gallery';
-import { Contact } from './sections/Contact';
-import { Footer } from './components/Footer';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { RequireAdmin } from './components/RequireAdmin';
+import { HomePage } from './pages/HomePage';
+import { SpecialtyDetailPage } from './pages/SpecialtyDetailPage';
+import { AdminLoginPage } from './pages/admin/AdminLoginPage';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
+import { EspecialidadesAdminPage } from './pages/admin/EspecialidadesAdminPage';
+import { TrabajosAdminPage } from './pages/admin/TrabajosAdminPage';
+import { PersonasAdminPage } from './pages/admin/PersonasAdminPage';
+import { AdminsPage } from './pages/admin/AdminsPage';
 
 import './App.css';
 
 function App() {
-  // Smooth scroll para los enlaces internos
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isAnchor = target.closest('a[href^="#"]');
-      
-      if (isAnchor) {
-        e.preventDefault();
-        const href = (isAnchor as HTMLAnchorElement).getAttribute('href');
-        
-        if (href && href !== '#') {
-          const targetElement = document.querySelector(href);
-          if (targetElement) {
-            targetElement.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
-        }
-      }
-    };
-
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
-  }, []);
-
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <Header />
-      
-      <main className="flex-grow">
-        <AnimatePresence>
-        <Hero key="hero" />
-        <Services key="services" />
-        <WhyUs key="whyus" />
-        <Gallery key="gallery" />
-        <Contact key="contact" />
-      </AnimatePresence>
-      </main>
-      
-      <Footer />
-    </div>
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/servicios/:slug" element={<SpecialtyDetailPage />} />
+
+            <Route path="/gestion-seprogar" element={<AdminLoginPage />} />
+            <Route
+              path="/gestion-seprogar/panel"
+              element={
+                <RequireAdmin>
+                  <AdminLayout />
+                </RequireAdmin>
+              }
+            >
+              <Route index element={<AdminDashboardPage />} />
+              <Route path="especialidades" element={<EspecialidadesAdminPage />} />
+              <Route path="trabajos" element={<TrabajosAdminPage />} />
+              <Route path="personas" element={<PersonasAdminPage />} />
+              <Route path="administradores" element={<AdminsPage />} />
+            </Route>
+
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
