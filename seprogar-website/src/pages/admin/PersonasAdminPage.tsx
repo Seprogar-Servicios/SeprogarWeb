@@ -5,6 +5,21 @@ import { deleteCatalogImage, uploadCatalogImage } from '../../lib/storage';
 import type { Especialidad, Persona } from '../../types/database';
 import { Spinner } from '../../components/ui/Spinner';
 import { invalidateEquipoCache } from '../../hooks/useHasEquipo';
+import { ImageUploader } from '../../components/admin/ImageUploader';
+import {
+  AdminAlert,
+  AdminButton,
+  AdminCard,
+  AdminField,
+  AdminInput,
+  AdminPageHeader,
+  AdminSwitch,
+  AdminTable,
+  AdminTd,
+  AdminTh,
+  IconActionButton,
+  StatusBadge,
+} from '../../components/admin/adminUi';
 
 export function PersonasAdminPage() {
   const [personas, setPersonas] = useState<Persona[]>([]);
@@ -86,6 +101,8 @@ export function PersonasAdminPage() {
           }
         }
         fotografia_path = path;
+      } else if (!currentPhoto) {
+        fotografia_path = null;
       }
 
       const payload = {
@@ -112,7 +129,7 @@ export function PersonasAdminPage() {
           assigned.map((especialidad_id) => ({
             persona_id: personaId,
             especialidad_id,
-          }))
+          })),
         );
         if (linkErr) throw linkErr;
       }
@@ -149,167 +166,152 @@ export function PersonasAdminPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-2xl font-bold">Equipo</h2>
-          <p className="text-sm text-gray-500">
-            Altas, bajas y ediciones. El <strong>orden</strong> define la jerarquía en el carrusel de
-            la home (1 = primero). Las especialidades definen en qué páginas de servicio aparecen.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={startCreate}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#F37021] px-4 py-2 text-white text-sm font-medium"
-        >
-          <Plus className="w-4 h-4" />
-          Nueva
-        </button>
-      </div>
+      <AdminPageHeader
+        title="Equipo"
+        description={
+          <>
+            Altas, bajas y ediciones. El <strong className="text-foreground">orden</strong> define la
+            jerarquía en el carrusel de la home (1 = primero).
+          </>
+        }
+        action={
+          <AdminButton type="button" variant="brand" onClick={startCreate}>
+            <Plus className="h-4 w-4" />
+            Nueva
+          </AdminButton>
+        }
+      />
 
-      {error ? <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</p> : null}
+      {error ? <AdminAlert tone="error">{error}</AdminAlert> : null}
 
-      <form onSubmit={onSubmit} className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
-        <h3 className="font-semibold">{form.id ? 'Editar integrante' : 'Nuevo integrante'}</h3>
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="text-sm">
-            Nombre
-            <input
-              required
-              className="mt-1 w-full rounded-lg border px-3 py-2"
-              value={form.nombre}
-              onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
-            />
-          </label>
-          <label className="text-sm">
-            Cargo / puesto
-            <input
-              className="mt-1 w-full rounded-lg border px-3 py-2"
-              placeholder="Ej. Responsable técnico, Plomero…"
-              value={form.cargo}
-              onChange={(e) => setForm((f) => ({ ...f, cargo: e.target.value }))}
-            />
-          </label>
-          <label className="text-sm">
-            Orden jerárquico
-            <input
-              type="number"
-              className="mt-1 w-full rounded-lg border px-3 py-2"
-              value={form.orden}
-              onChange={(e) => setForm((f) => ({ ...f, orden: Number(e.target.value) }))}
-            />
-            <span className="mt-1 block text-xs text-gray-500">
-              Menor número = aparece antes en el carrusel de la web.
-            </span>
-          </label>
-          <label className="text-sm flex items-center gap-2 mt-6">
-            <input
-              type="checkbox"
-              checked={form.publicado}
-              onChange={(e) => setForm((f) => ({ ...f, publicado: e.target.checked }))}
-            />
-            Publicado (visible en la web)
-          </label>
-          <label className="text-sm md:col-span-2">
-            Fotografía
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              className="mt-1 block w-full text-sm"
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            />
-            {currentPhoto ? (
-              <img
-                src={getPublicMediaUrl(currentPhoto) ?? ''}
-                alt=""
-                className="mt-2 h-20 w-20 rounded-full object-cover"
+      <AdminCard
+        title={form.id ? 'Editar integrante' : 'Nuevo integrante'}
+        description="Foto con vista previa y especialidades donde aparece."
+      >
+        <form onSubmit={onSubmit} className="space-y-5">
+          <div className="grid gap-4 md:grid-cols-2">
+            <AdminField label="Nombre">
+              <AdminInput
+                required
+                value={form.nombre}
+                onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
               />
-            ) : null}
-          </label>
-        </div>
-        <fieldset>
-          <legend className="text-sm font-medium mb-2">Especialidades donde aparece</legend>
-          <p className="text-xs text-gray-500 mb-2">
-            Si no asignás ninguna, igual puede verse en el carrusel general al publicarse.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            {especialidades.map((esp) => (
-              <label key={esp.id} className="inline-flex items-center gap-2 text-sm border rounded-lg px-3 py-2">
-                <input
-                  type="checkbox"
-                  checked={assigned.includes(esp.id)}
-                  onChange={() => toggleEspecialidad(esp.id)}
-                />
-                {esp.nombre}
-              </label>
-            ))}
+            </AdminField>
+            <AdminField label="Cargo / puesto">
+              <AdminInput
+                placeholder="Ej. Responsable técnico, Plomero…"
+                value={form.cargo}
+                onChange={(e) => setForm((f) => ({ ...f, cargo: e.target.value }))}
+              />
+            </AdminField>
+            <AdminField
+              label="Orden jerárquico"
+              hint="Menor número = aparece antes en el carrusel de la web."
+            >
+              <AdminInput
+                type="number"
+                value={form.orden}
+                onChange={(e) => setForm((f) => ({ ...f, orden: Number(e.target.value) }))}
+              />
+            </AdminField>
+            <AdminSwitch
+              checked={form.publicado}
+              onChange={(publicado) => setForm((f) => ({ ...f, publicado }))}
+              label="Publicado"
+              description="Visible en la web"
+            />
+            <div className="md:col-span-2">
+              <ImageUploader
+                label="Fotografía"
+                shape="circle"
+                existingPath={currentPhoto}
+                file={file}
+                onFileChange={setFile}
+                onClearExisting={() => setCurrentPhoto(null)}
+              />
+            </div>
           </div>
-        </fieldset>
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded-xl bg-[#000336] text-white px-4 py-2 text-sm disabled:opacity-60"
-        >
-          {saving ? 'Guardando…' : 'Guardar'}
-        </button>
-      </form>
 
-      <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3">Orden</th>
-              <th className="px-4 py-3">Nombre</th>
-              <th className="px-4 py-3">Cargo</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3" />
+          <fieldset>
+            <legend className="text-sm font-medium text-foreground mb-1">
+              Especialidades donde aparece
+            </legend>
+            <p className="text-xs text-muted mb-3">
+              Si no asignás ninguna, igual puede verse en el carrusel general al publicarse.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {especialidades.map((esp) => {
+                const active = assigned.includes(esp.id);
+                return (
+                  <button
+                    key={esp.id}
+                    type="button"
+                    onClick={() => toggleEspecialidad(esp.id)}
+                    className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${
+                      active
+                        ? 'border-[#F37021]/40 bg-[#F37021]/15 text-[#F37021]'
+                        : 'border-theme bg-surface-elevated text-muted hover:text-foreground'
+                    }`}
+                  >
+                    {esp.nombre}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <AdminButton type="submit" variant="primary" disabled={saving}>
+            {saving ? 'Guardando…' : 'Guardar'}
+          </AdminButton>
+        </form>
+      </AdminCard>
+
+      <AdminTable>
+        <thead>
+          <tr>
+            <AdminTh>Orden</AdminTh>
+            <AdminTh>Nombre</AdminTh>
+            <AdminTh>Cargo</AdminTh>
+            <AdminTh>Estado</AdminTh>
+            <AdminTh />
+          </tr>
+        </thead>
+        <tbody>
+          {personas.map((persona) => (
+            <tr key={persona.id}>
+              <AdminTd className="text-muted">{persona.orden}</AdminTd>
+              <AdminTd>
+                <div className="flex items-center gap-2.5 font-medium">
+                  {persona.fotografia_path ? (
+                    <img
+                      src={getPublicMediaUrl(persona.fotografia_path) ?? ''}
+                      alt=""
+                      className="h-9 w-9 rounded-full object-cover border border-theme"
+                    />
+                  ) : (
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-surface-elevated border border-theme text-xs font-bold text-muted">
+                      {persona.nombre.charAt(0)}
+                    </span>
+                  )}
+                  {persona.nombre}
+                </div>
+              </AdminTd>
+              <AdminTd className="text-muted">{persona.cargo ?? '—'}</AdminTd>
+              <AdminTd>
+                <StatusBadge published={persona.publicado} />
+              </AdminTd>
+              <AdminTd className="text-right whitespace-nowrap">
+                <IconActionButton label="Editar" onClick={() => void startEdit(persona)}>
+                  <Pencil className="h-4 w-4" />
+                </IconActionButton>
+                <IconActionButton label="Eliminar" tone="danger" onClick={() => void remove(persona)}>
+                  <Trash2 className="h-4 w-4" />
+                </IconActionButton>
+              </AdminTd>
             </tr>
-          </thead>
-          <tbody>
-            {personas.map((persona) => (
-              <tr key={persona.id} className="border-t">
-                <td className="px-4 py-3 text-gray-500">{persona.orden}</td>
-                <td className="px-4 py-3 font-medium">
-                  <div className="flex items-center gap-2">
-                    {persona.fotografia_path ? (
-                      <img
-                        src={getPublicMediaUrl(persona.fotografia_path) ?? ''}
-                        alt=""
-                        className="h-8 w-8 rounded-full object-cover"
-                      />
-                    ) : (
-                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-xs font-bold">
-                        {persona.nombre.charAt(0)}
-                      </span>
-                    )}
-                    {persona.nombre}
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-gray-500">{persona.cargo ?? '—'}</td>
-                <td className="px-4 py-3">{persona.publicado ? 'Publicado' : 'Borrador'}</td>
-                <td className="px-4 py-3 text-right space-x-2">
-                  <button
-                    type="button"
-                    onClick={() => void startEdit(persona)}
-                    className="inline-flex p-2 hover:bg-gray-50 rounded-lg"
-                    aria-label="Editar"
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void remove(persona)}
-                    className="inline-flex p-2 hover:bg-red-50 text-red-600 rounded-lg"
-                    aria-label="Eliminar"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </AdminTable>
     </div>
   );
 }

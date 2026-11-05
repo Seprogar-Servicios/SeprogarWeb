@@ -3,6 +3,14 @@ import { supabase } from '../../lib/supabase';
 import type { Profile } from '../../types/database';
 import { useAuth } from '../../contexts/AuthContext';
 import { Spinner } from '../../components/ui/Spinner';
+import {
+  AdminAlert,
+  AdminButton,
+  AdminPageHeader,
+  AdminTable,
+  AdminTd,
+  AdminTh,
+} from '../../components/admin/adminUi';
 
 export function AdminsPage() {
   const { user } = useAuth();
@@ -44,7 +52,7 @@ export function AdminsPage() {
     setMessage(
       profile.is_admin
         ? `Se quitó el acceso admin a ${profile.email}`
-        : `Se otorgó acceso admin a ${profile.email}`
+        : `Se otorgó acceso admin a ${profile.email}`,
     );
     await load();
   }
@@ -52,51 +60,67 @@ export function AdminsPage() {
   if (loading) return <Spinner />;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Administradores</h2>
-        <p className="text-sm text-gray-500 mt-1">
-          El primer usuario se crea manualmente en Supabase Studio (Auth → Add user) y luego se marca{' '}
-          <code className="text-xs bg-slate-100 px-1 rounded">is_admin = true</code> en la tabla{' '}
-          <code className="text-xs bg-slate-100 px-1 rounded">profiles</code>. El registro público está
-          deshabilitado. Usuarios adicionales: crearlos en Studio y asignar el rol aquí o por SQL.
-        </p>
-      </div>
+    <div className="space-y-8">
+      <AdminPageHeader
+        title="Administradores"
+        description={
+          <>
+            El primer usuario se crea manualmente en Supabase Studio (Auth → Add user) y luego se marca{' '}
+            <code className="rounded bg-surface-elevated border border-theme px-1.5 py-0.5 text-xs text-foreground">
+              is_admin = true
+            </code>{' '}
+            en{' '}
+            <code className="rounded bg-surface-elevated border border-theme px-1.5 py-0.5 text-xs text-foreground">
+              profiles
+            </code>
+            . El registro público está deshabilitado.
+          </>
+        }
+      />
 
-      {error ? <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</p> : null}
-      {message ? <p className="text-sm text-green-700 bg-green-50 rounded-lg px-3 py-2">{message}</p> : null}
+      {error ? <AdminAlert tone="error">{error}</AdminAlert> : null}
+      {message ? <AdminAlert tone="success">{message}</AdminAlert> : null}
 
-      <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3">Email</th>
-              <th className="px-4 py-3">Nombre</th>
-              <th className="px-4 py-3">Admin</th>
-              <th className="px-4 py-3" />
+      <AdminTable>
+        <thead>
+          <tr>
+            <AdminTh>Email</AdminTh>
+            <AdminTh>Nombre</AdminTh>
+            <AdminTh>Admin</AdminTh>
+            <AdminTh />
+          </tr>
+        </thead>
+        <tbody>
+          {profiles.map((profile) => (
+            <tr key={profile.id}>
+              <AdminTd className="font-medium">{profile.email}</AdminTd>
+              <AdminTd className="text-muted">{profile.full_name || '—'}</AdminTd>
+              <AdminTd>
+                <span
+                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                    profile.is_admin
+                      ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                      : 'bg-slate-500/15 text-muted'
+                  }`}
+                >
+                  {profile.is_admin ? 'Admin' : 'Usuario'}
+                </span>
+              </AdminTd>
+              <AdminTd className="text-right">
+                <AdminButton
+                  type="button"
+                  variant="secondary"
+                  className="!px-3 !py-1.5 !text-xs"
+                  onClick={() => void toggleAdmin(profile)}
+                  disabled={profile.id === user?.id}
+                >
+                  {profile.is_admin ? 'Quitar admin' : 'Hacer admin'}
+                </AdminButton>
+              </AdminTd>
             </tr>
-          </thead>
-          <tbody>
-            {profiles.map((profile) => (
-              <tr key={profile.id} className="border-t">
-                <td className="px-4 py-3">{profile.email}</td>
-                <td className="px-4 py-3 text-gray-500">{profile.full_name || '—'}</td>
-                <td className="px-4 py-3">{profile.is_admin ? 'Sí' : 'No'}</td>
-                <td className="px-4 py-3 text-right">
-                  <button
-                    type="button"
-                    onClick={() => void toggleAdmin(profile)}
-                    disabled={profile.id === user?.id}
-                    className="rounded-lg border px-3 py-1.5 text-xs disabled:opacity-40"
-                  >
-                    {profile.is_admin ? 'Quitar admin' : 'Hacer admin'}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </AdminTable>
     </div>
   );
 }

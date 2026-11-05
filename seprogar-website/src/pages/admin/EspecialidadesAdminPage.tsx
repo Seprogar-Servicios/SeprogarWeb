@@ -1,10 +1,26 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
-import { supabase, getPublicMediaUrl } from '../../lib/supabase';
+import { supabase } from '../../lib/supabase';
 import { deleteCatalogImage, uploadCatalogImage } from '../../lib/storage';
 import { slugify } from '../../lib/slug';
 import type { Especialidad } from '../../types/database';
 import { Spinner } from '../../components/ui/Spinner';
+import { ImageUploader } from '../../components/admin/ImageUploader';
+import {
+  AdminAlert,
+  AdminButton,
+  AdminCard,
+  AdminField,
+  AdminInput,
+  AdminPageHeader,
+  AdminSwitch,
+  AdminTable,
+  AdminTd,
+  AdminTextarea,
+  AdminTh,
+  IconActionButton,
+  StatusBadge,
+} from '../../components/admin/adminUi';
 
 const emptyForm = {
   id: '',
@@ -133,31 +149,28 @@ export function EspecialidadesAdminPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-2xl font-bold">Especialidades</h2>
-          <p className="text-sm text-gray-500">Catálogo público dinámico</p>
-        </div>
-        <button
-          type="button"
-          onClick={startCreate}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#F37021] px-4 py-2 text-white text-sm font-medium"
-        >
-          <Plus className="w-4 h-4" />
-          Nueva
-        </button>
-      </div>
+      <AdminPageHeader
+        title="Especialidades"
+        description="Catálogo público dinámico de servicios."
+        action={
+          <AdminButton type="button" variant="brand" onClick={startCreate}>
+            <Plus className="h-4 w-4" />
+            Nueva
+          </AdminButton>
+        }
+      />
 
-      {error ? <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</p> : null}
+      {error ? <AdminAlert tone="error">{error}</AdminAlert> : null}
 
-      <form onSubmit={onSubmit} className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
-          <h3 className="font-semibold">{form.id ? 'Editar especialidad' : 'Nueva especialidad'}</h3>
+      <AdminCard
+        title={form.id ? 'Editar especialidad' : 'Nueva especialidad'}
+        description="Completá los datos y publicá cuando esté lista para la web."
+      >
+        <form onSubmit={onSubmit} className="space-y-5">
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="text-sm">
-              Nombre
-              <input
+            <AdminField label="Nombre">
+              <AdminInput
                 required
-                className="mt-1 w-full rounded-lg border px-3 py-2"
                 value={form.nombre}
                 onChange={(e) =>
                   setForm((f) => ({
@@ -167,128 +180,100 @@ export function EspecialidadesAdminPage() {
                   }))
                 }
               />
-            </label>
-            <label className="text-sm">
-              Slug (URL)
-              <input
+            </AdminField>
+            <AdminField label="Slug (URL)">
+              <AdminInput
                 required
-                className="mt-1 w-full rounded-lg border px-3 py-2"
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: slugify(e.target.value) }))}
               />
-            </label>
-            <label className="text-sm md:col-span-2">
-              Descripción breve
-              <input
-                className="mt-1 w-full rounded-lg border px-3 py-2"
+            </AdminField>
+            <AdminField label="Descripción breve" className="md:col-span-2">
+              <AdminInput
                 value={form.descripcion_breve}
                 onChange={(e) => setForm((f) => ({ ...f, descripcion_breve: e.target.value }))}
               />
-            </label>
-            <label className="text-sm md:col-span-2">
-              Descripción completa
-              <textarea
+            </AdminField>
+            <AdminField label="Descripción completa" className="md:col-span-2">
+              <AdminTextarea
                 rows={4}
-                className="mt-1 w-full rounded-lg border px-3 py-2"
                 value={form.descripcion_completa}
                 onChange={(e) => setForm((f) => ({ ...f, descripcion_completa: e.target.value }))}
               />
-            </label>
-            <label className="text-sm">
-              Orden
-              <input
+            </AdminField>
+            <AdminField label="Orden">
+              <AdminInput
                 type="number"
-                className="mt-1 w-full rounded-lg border px-3 py-2"
                 value={form.orden}
                 onChange={(e) => setForm((f) => ({ ...f, orden: Number(e.target.value) }))}
               />
-            </label>
-            <label className="text-sm flex items-center gap-2 mt-6">
-              <input
-                type="checkbox"
-                checked={form.publicado}
-                onChange={(e) => setForm((f) => ({ ...f, publicado: e.target.checked }))}
+            </AdminField>
+            <AdminSwitch
+              checked={form.publicado}
+              onChange={(publicado) => setForm((f) => ({ ...f, publicado }))}
+              label="Publicada"
+              description="Visible en la web pública"
+            />
+            <div className="md:col-span-2">
+              <ImageUploader
+                label="Imagen de portada"
+                existingPath={editingCover}
+                file={file}
+                onFileChange={setFile}
+                onClearExisting={() => setEditingCover(null)}
               />
-              Publicada
-            </label>
-            <label className="text-sm md:col-span-2">
-              Imagen de portada
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif"
-                className="mt-1 block w-full text-sm"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              />
-              {editingCover ? (
-                <img
-                  src={getPublicMediaUrl(editingCover) ?? ''}
-                  alt="Portada actual"
-                  className="mt-2 h-24 w-36 object-cover rounded-lg"
-                />
-              ) : null}
-            </label>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              disabled={saving}
-              className="rounded-xl bg-[#000336] text-white px-4 py-2 text-sm disabled:opacity-60"
-            >
+          <div className="flex flex-wrap gap-2 pt-1">
+            <AdminButton type="submit" variant="primary" disabled={saving}>
               {saving ? 'Guardando…' : 'Guardar'}
-            </button>
-            <button
+            </AdminButton>
+            <AdminButton
               type="button"
+              variant="secondary"
               onClick={() => {
                 setForm(emptyForm);
                 setFile(null);
                 setEditingCover(null);
               }}
-              className="rounded-xl border px-4 py-2 text-sm"
             >
               Cancelar
-            </button>
+            </AdminButton>
           </div>
         </form>
+      </AdminCard>
 
-      <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-        <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left">
-            <tr>
-              <th className="px-4 py-3">Orden</th>
-              <th className="px-4 py-3">Nombre</th>
-              <th className="px-4 py-3">Slug</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3" />
+      <AdminTable>
+        <thead>
+          <tr>
+            <AdminTh>Orden</AdminTh>
+            <AdminTh>Nombre</AdminTh>
+            <AdminTh>Slug</AdminTh>
+            <AdminTh>Estado</AdminTh>
+            <AdminTh />
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.id}>
+              <AdminTd className="text-muted">{item.orden}</AdminTd>
+              <AdminTd className="font-medium">{item.nombre}</AdminTd>
+              <AdminTd className="text-muted">{item.slug}</AdminTd>
+              <AdminTd>
+                <StatusBadge published={item.publicado} />
+              </AdminTd>
+              <AdminTd className="text-right whitespace-nowrap">
+                <IconActionButton label="Editar" onClick={() => startEdit(item)}>
+                  <Pencil className="h-4 w-4" />
+                </IconActionButton>
+                <IconActionButton label="Eliminar" tone="danger" onClick={() => void remove(item)}>
+                  <Trash2 className="h-4 w-4" />
+                </IconActionButton>
+              </AdminTd>
             </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id} className="border-t">
-                <td className="px-4 py-3">{item.orden}</td>
-                <td className="px-4 py-3 font-medium">{item.nombre}</td>
-                <td className="px-4 py-3 text-gray-500">{item.slug}</td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs ${
-                      item.publicado ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
-                    }`}
-                  >
-                    {item.publicado ? 'Publicada' : 'Borrador'}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-right space-x-2">
-                  <button type="button" onClick={() => startEdit(item)} className="inline-flex p-2 hover:bg-gray-50 rounded-lg" aria-label="Editar">
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                  <button type="button" onClick={() => void remove(item)} className="inline-flex p-2 hover:bg-red-50 text-red-600 rounded-lg" aria-label="Eliminar">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </AdminTable>
     </div>
   );
 }
