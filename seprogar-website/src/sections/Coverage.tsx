@@ -1,16 +1,12 @@
 import { motion } from 'framer-motion';
 import { MapPin, Navigation, Phone } from 'lucide-react';
-
-const zones = [
-  'CABA',
-  'Zona Norte',
-  'Zona Oeste',
-  'Zona Sur',
-  'GBA',
-  'Consultá tu zona',
-] as const;
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { whatsappLink } from '../lib/fallbackContent';
 
 export const Coverage = () => {
+  const { content } = useSiteContent();
+  const coverage = content.coverage;
+
   return (
     <section id="zonas" className="relative py-14 md:py-16 overflow-hidden">
       <div className="absolute inset-0 bg-surface/55" />
@@ -27,24 +23,26 @@ export const Coverage = () => {
           >
             <div className="inline-flex items-center justify-center bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white text-sm font-semibold px-4 py-1.5 rounded-full mb-5 shadow-brand">
               <Navigation className="w-4 h-4 mr-2" />
-              Cobertura
+              {coverage.eyebrow}
             </div>
             <h2 className="font-display text-4xl md:text-5xl font-extrabold text-foreground mb-5">
-              Zonas de <span className="text-gradient-brand">atención</span>
+              {coverage.headline}{' '}
+              {coverage.highlight ? (
+                <span className="text-gradient-brand">{coverage.highlight}</span>
+              ) : null}
             </h2>
             <div className="w-24 h-1.5 bg-gradient-to-r from-[#F37021] to-[#FF9E5E] rounded-full mb-5" />
             <p className="text-muted text-base md:text-lg leading-relaxed mb-6 max-w-xl">
-              Atendemos CABA y Gran Buenos Aires. Si tu zona no aparece en la lista, escribinos igual:
-              coordinamos según disponibilidad y urgencia.
+              {coverage.subheadline}
             </p>
             <a
-              href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20consultar%20si%20atienden%20en%20mi%20zona"
+              href={whatsappLink(content.settings.whatsapp, coverage.cta_message)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F37021] to-[#FF9E5E] px-6 py-3.5 font-semibold text-white shadow-brand hover:brightness-105 transition"
             >
               <Phone className="h-4 w-4" />
-              Consultar mi zona
+              {coverage.cta_label}
             </a>
           </motion.div>
 
@@ -60,9 +58,9 @@ export const Coverage = () => {
               <h3 className="font-display text-lg font-bold">Principales áreas</h3>
             </div>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {zones.map((zone, index) => (
+              {coverage.zones.map((zone, index) => (
                 <motion.li
-                  key={zone}
+                  key={`${zone}-${index}`}
                   initial={{ opacity: 0, x: 12 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -74,9 +72,9 @@ export const Coverage = () => {
                 </motion.li>
               ))}
             </ul>
-            <p className="mt-5 text-xs text-muted leading-relaxed">
-              La cobertura exacta puede variar según el tipo de servicio y la demanda del día.
-            </p>
+            {coverage.note ? (
+              <p className="mt-5 text-xs text-muted leading-relaxed">{coverage.note}</p>
+            ) : null}
           </motion.div>
         </div>
       </div>

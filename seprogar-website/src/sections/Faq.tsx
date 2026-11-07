@@ -1,51 +1,12 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, CircleHelp, MessageCircle } from 'lucide-react';
-
-export const FAQ_ITEMS = [
-  {
-    question: '¿Qué servicios cubren?',
-    answer:
-      'Plomería, gas, electricidad, aires acondicionados y pintura, entre otros trabajos de instalación y mantenimiento. Si tu necesidad es puntual, escribinos y te decimos si podemos tomarlo.',
-  },
-  {
-    question: '¿Atienden emergencias?',
-    answer:
-      'Sí. Para urgencias (fugas, cortes, fallas críticas) escribinos por WhatsApp con zona y una breve descripción. Priorizamos según gravedad y disponibilidad del equipo.',
-  },
-  {
-    question: '¿En qué horarios trabajan?',
-    answer:
-      'Atención habitual de lunes a domingo en franja diurna. Fuera de ese horario se evalúan emergencias caso por caso.',
-  },
-  {
-    question: '¿Cómo pido un presupuesto?',
-    answer:
-      'Por WhatsApp o desde el formulario de contacto. Con fotos y una descripción breve podemos orientarte mejor. Si hace falta visita técnica, te lo avisamos antes de coordinarla.',
-  },
-  {
-    question: '¿La visita tiene costo?',
-    answer:
-      'La orientación inicial por mensaje es sin cargo. Si el caso requiere relevamiento en el lugar, te confirmamos condiciones antes de agendar.',
-  },
-  {
-    question: '¿Trabajan con instalaciones de gas certificadas?',
-    answer:
-      'Realizamos instalaciones y trabajos relacionados con gas respetando la normativa vigente. Consultanos el tipo de instalación para confirmar documentación y requisitos.',
-  },
-  {
-    question: '¿Llegan a mi zona?',
-    answer:
-      'Cubrimos CABA y Gran Buenos Aires (norte, oeste y sur). Si estás en el límite o en otra localidad, consultá igual: coordinamos según distancia y agenda.',
-  },
-  {
-    question: '¿Qué necesito tener listo el día del trabajo?',
-    answer:
-      'Acceso al lugar, alguien que pueda autorizar la intervención y, si aplica, datos del medidor o tablero. Te indicamos lo específico al confirmar el turno.',
-  },
-] as const;
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { whatsappLink } from '../lib/fallbackContent';
 
 export const Faq = () => {
+  const { content } = useSiteContent();
+  const faq = content.faq;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -63,39 +24,34 @@ export const Faq = () => {
           >
             <div className="inline-flex items-center bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 shadow-brand">
               <CircleHelp className="w-3.5 h-3.5 mr-1.5" />
-              Antes de escribirnos
+              {faq.eyebrow}
             </div>
             <h2 className="font-display text-3xl md:text-4xl font-extrabold text-foreground mb-3">
-              Preguntas <span className="text-gradient-brand">frecuentes</span>
+              {faq.headline}{' '}
+              {faq.highlight ? <span className="text-gradient-brand">{faq.highlight}</span> : null}
             </h2>
-            <p className="text-muted text-sm md:text-base leading-relaxed mb-5">
-              Armamos esta guía con lo que más consultan: servicios, urgencias, zonas y cómo
-              coordinar. Si tu caso es distinto, hablanos directo.
-            </p>
+            <p className="text-muted text-sm md:text-base leading-relaxed mb-5">{faq.subheadline}</p>
             <div className="rounded-2xl border border-theme bg-surface p-5">
-              <p className="font-display font-bold text-foreground mb-1">¿No encontrás tu duda?</p>
-              <p className="text-sm text-muted mb-4 leading-relaxed">
-                Mandanos un mensaje con tu zona y el problema. Te respondemos con la próxima acción
-                concreta.
-              </p>
+              <p className="font-display font-bold text-foreground mb-1">{faq.cta_title}</p>
+              <p className="text-sm text-muted mb-4 leading-relaxed">{faq.cta_body}</p>
               <a
-                href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20tengo%20una%20consulta"
+                href={whatsappLink(content.settings.whatsapp, faq.cta_message)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#F37021] to-[#FF9E5E] px-5 py-3 text-sm font-semibold text-white shadow-brand"
               >
                 <MessageCircle className="h-4 w-4" />
-                Consultar por WhatsApp
+                {faq.cta_label}
               </a>
             </div>
           </motion.div>
 
           <div className="grid gap-2.5 sm:grid-cols-1">
-            {FAQ_ITEMS.map((item, index) => {
+            {faq.items.map((item, index) => {
               const isOpen = openIndex === index;
               return (
                 <motion.div
-                  key={item.question}
+                  key={`${item.question}-${index}`}
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}

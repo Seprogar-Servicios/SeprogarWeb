@@ -169,16 +169,24 @@ export function AdminButton({
   );
 }
 
-export function StatusBadge({ published }: { published: boolean }) {
+export function StatusBadge({
+  published,
+  activeLabel = 'Publicado',
+  inactiveLabel = 'Borrador',
+}: {
+  published: boolean;
+  activeLabel?: string;
+  inactiveLabel?: string;
+}) {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
         published
           ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
-          : 'bg-slate-500/15 text-muted'
+          : 'bg-amber-500/15 text-amber-800 dark:text-amber-200'
       }`}
     >
-      {published ? 'Publicado' : 'Borrador'}
+      {published ? activeLabel : inactiveLabel}
     </span>
   );
 }

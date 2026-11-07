@@ -18,6 +18,8 @@ import { ThemeToggle } from './ThemeToggle';
 import { useTheme } from '../contexts/ThemeContext';
 import { useHasEquipo } from '../hooks/useHasEquipo';
 import { scrollToSection } from '../lib/scroll';
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { whatsappLink } from '../lib/fallbackContent';
 
 const navLinks = [
   { href: '#inicio', label: 'Inicio', icon: Home },
@@ -41,9 +43,18 @@ export const Header = () => {
   const location = useLocation();
   const { isDark } = useTheme();
   const { hasEquipo } = useHasEquipo();
+  const { content } = useSiteContent();
+  const presupuestoHref = whatsappLink(
+    content.settings.whatsapp,
+    'Hola Seprogar, quiero solicitar un presupuesto',
+  );
   const onHome = location.pathname === '/';
-  /** Solo en dark el hero es oscuro: el nav va en blanco. En light usa colores normales. */
+  /** Solo en home + dark + tope: nav transparente sobre hero oscuro. */
   const overDarkHero = onHome && !isScrolled && isDark;
+  /** Wordmark con azul oscuro: invertirlo siempre en dark (home scrolleada, especialidades, etc.). */
+  const invertLogo = isDark;
+  /** En páginas internas (o dark fuera del hero) conviene barra sólida, no degradé blanco. */
+  const solidChrome = !onHome || isScrolled || (isDark && !overDarkHero);
   const visibleLinks = navLinks.filter((link) => link.href !== '#equipo' || hasEquipo);
 
   useEffect(() => {
@@ -95,7 +106,7 @@ export const Header = () => {
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-500 ${
-        isScrolled
+        solidChrome
           ? 'bg-surface/90 backdrop-blur-xl shadow-[0_10px_40px_-20px_rgba(0,0,0,0.35)] border-b border-theme py-2'
           : overDarkHero
             ? 'bg-gradient-to-b from-black/35 to-transparent py-4'
@@ -103,17 +114,23 @@ export const Header = () => {
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-3">
           <Link
             to="/#inicio"
-            className="flex items-center space-x-3"
+            className="flex items-center gap-2.5 shrink-0"
             onClick={(e) => handleSectionClick(e, '#inicio')}
           >
-            <img src="/img/Seprogar-Logo-02.png" alt="Seprogar" className="h-10 w-auto" />
+            <img
+              src="/img/Seprogar-Logo-02.png"
+              alt="Seprogar"
+              className="h-9 w-auto sm:h-10 object-contain"
+            />
             <img
               src="/img/Seprogar-Logo-03.png"
               alt="SEPROGAR"
-              className={`h-8 w-auto transition-all ${overDarkHero ? 'brightness-0 invert' : ''}`}
+              className={`h-7 sm:h-8 w-auto object-contain transition-all ${
+                invertLogo ? 'brightness-0 invert' : ''
+              }`}
             />
           </Link>
 
@@ -141,7 +158,7 @@ export const Header = () => {
             ))}
             <ThemeToggle lightOnDark={overDarkHero} />
             <a
-              href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20presupuesto"
+              href={presupuestoHref}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-1 bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 shadow-brand hover:brightness-105 transition"
@@ -192,7 +209,7 @@ export const Header = () => {
                   </Link>
                 ))}
                 <a
-                  href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20presupuesto"
+                  href={presupuestoHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center mt-2 bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white px-6 py-3 rounded-full font-semibold"

@@ -5,11 +5,15 @@ import { Link } from 'react-router-dom';
 import { fetchEspecialidadesPublicas } from '../lib/api/especialidades';
 import type { Especialidad } from '../types/database';
 import { useHasEquipo } from '../hooks/useHasEquipo';
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { whatsappLink } from '../lib/fallbackContent';
 
 export const Footer = () => {
   const [showScroll, setShowScroll] = useState(false);
   const [servicios, setServicios] = useState<Especialidad[]>([]);
   const { hasEquipo } = useHasEquipo();
+  const { content } = useSiteContent();
+  const settings = content.settings;
 
   useEffect(() => {
     const checkScroll = () => {
@@ -61,14 +65,14 @@ export const Footer = () => {
             </p>
             <div className="flex space-x-3">
               {[
-                { icon: Facebook, label: 'Facebook', url: '#' },
-                { icon: Instagram, label: 'Instagram', url: '#' },
+                { icon: Facebook, label: 'Facebook', url: settings.social_links.facebook || '#' },
+                { icon: Instagram, label: 'Instagram', url: settings.social_links.instagram || '#' },
                 {
                   icon: MessageCircle,
                   label: 'WhatsApp',
-                  url: 'https://wa.me/5491128484962',
+                  url: whatsappLink(settings.whatsapp, 'Hola Seprogar'),
                 },
-                { icon: Linkedin, label: 'LinkedIn', url: '#' },
+                { icon: Linkedin, label: 'LinkedIn', url: settings.social_links.linkedin || '#' },
               ].map((social, index) => (
                 <a
                   key={index}
@@ -162,15 +166,15 @@ export const Footer = () => {
                   <MapPin className="w-4 h-4 text-[#F37021] group-hover:text-white transition-colors" />
                 </div>
                 <span className="text-gray-300 group-hover:text-white transition-colors">
-                  Buenos Aires, Argentina
+                  {settings.address}
                 </span>
               </li>
               <li className="flex items-center group">
                 <div className="w-8 h-8 bg-[#F37021]/10 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-[#F37021] transition-colors">
                   <Phone className="w-4 h-4 text-[#F37021] group-hover:text-white transition-colors" />
                 </div>
-                <a href="tel:+5491128484962" className="text-gray-300 hover:text-white transition-colors">
-                  +54 9 11 2848-4962
+                <a href={`tel:${settings.phone_tel}`} className="text-gray-300 hover:text-white transition-colors">
+                  {settings.phone_display}
                 </a>
               </li>
               <li className="flex items-center group">
@@ -178,10 +182,10 @@ export const Footer = () => {
                   <Mail className="w-4 h-4 text-[#F37021] group-hover:text-white transition-colors" />
                 </div>
                 <a
-                  href="mailto:contacto@seprogar.com"
+                  href={`mailto:${settings.contact_email}`}
                   className="text-gray-300 hover:text-white transition-colors"
                 >
-                  contacto@seprogar.com
+                  {settings.contact_email}
                 </a>
               </li>
             </ul>

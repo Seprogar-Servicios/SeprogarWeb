@@ -1,29 +1,14 @@
 import { motion } from 'framer-motion';
-import { ShieldCheck, Clock3, Users2, Phone, Sparkles, Camera } from 'lucide-react';
-
-/** Cuando tengas la foto, ponela en public/img/ y actualizá esta ruta. */
-const TEAM_PHOTO_SRC: string | null = null;
-// Ejemplo: '/img/Seprogar-Equipo.jpg'
-
-const highlights = [
-  {
-    icon: ShieldCheck,
-    title: 'Criterio técnico',
-    description: 'Priorizamos seguridad y normativa en instalaciones sensibles como gas y electricidad.',
-  },
-  {
-    icon: Clock3,
-    title: 'Respuesta ágil',
-    description: 'Coordinamos según urgencia. Emergencias se evalúan al momento por WhatsApp.',
-  },
-  {
-    icon: Users2,
-    title: 'Trato directo',
-    description: 'Hablás con el equipo que interviene: comunicación clara de punta a punta.',
-  },
-] as const;
+import { Phone, Sparkles, Camera, ShieldCheck } from 'lucide-react';
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { whatsappLink } from '../lib/fallbackContent';
+import { getSectionIcon } from '../lib/sectionIcons';
 
 export const WhyUs = () => {
+  const { content } = useSiteContent();
+  const about = content.about;
+  const photo = about.photo_url.trim() || null;
+
   return (
     <section id="nosotros" className="relative py-14 md:py-16 overflow-hidden">
       <div className="absolute inset-0 bg-surface/70" />
@@ -39,28 +24,21 @@ export const WhyUs = () => {
           >
             <div className="inline-flex items-center bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white text-xs font-semibold px-3 py-1 rounded-full mb-4 shadow-brand w-fit">
               <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-              La empresa
+              {about.eyebrow}
             </div>
             <h2 className="font-display text-3xl md:text-4xl font-extrabold text-foreground mb-4 leading-tight">
-              SEPROGAR, soluciones técnicas con foco en el día a día
+              {about.headline}
             </h2>
-            <p className="text-muted text-sm md:text-base leading-relaxed mb-4">
-              Somos un equipo de oficios e instalaciones para hogar, comercio y edificios. Trabajamos
-              plomería, gas, electricidad, aires y pintura con una idea simple: diagnosticar bien y
-              ejecutar con orden.
-            </p>
-            <p className="text-muted text-sm md:text-base leading-relaxed mb-6">
-              No vendemos paquetes genéricos: cada caso se evalúa según el lugar, la urgencia y lo que
-              realmente hace falta para dejar el sistema funcionando.
-            </p>
+            <p className="text-muted text-sm md:text-base leading-relaxed mb-4">{about.body_1}</p>
+            <p className="text-muted text-sm md:text-base leading-relaxed mb-6">{about.body_2}</p>
             <a
-              href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20conocer%20más%20sobre%20ustedes"
+              href={whatsappLink(content.settings.whatsapp, about.cta_message)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F37021] to-[#FF9E5E] px-5 py-3 text-sm font-semibold text-white shadow-brand hover:brightness-105 transition w-fit"
             >
               <Phone className="h-4 w-4" />
-              Hablar con el equipo
+              {about.cta_label}
             </a>
           </motion.div>
 
@@ -71,9 +49,9 @@ export const WhyUs = () => {
             transition={{ duration: 0.55, delay: 0.08 }}
             className="relative overflow-hidden rounded-3xl border border-theme bg-surface min-h-[240px] md:min-h-full"
           >
-            {TEAM_PHOTO_SRC ? (
+            {photo ? (
               <img
-                src={TEAM_PHOTO_SRC}
+                src={photo}
                 alt="Equipo SEPROGAR"
                 className="absolute inset-0 h-full w-full object-cover"
                 loading="lazy"
@@ -85,26 +63,28 @@ export const WhyUs = () => {
                   <Camera className="h-6 w-6" />
                 </div>
                 <div className="relative z-10">
-                  <p className="font-display text-lg font-bold text-white mb-1">Foto del equipo</p>
+                  <p className="font-display text-lg font-bold text-white mb-1">
+                    {about.photo_placeholder_title}
+                  </p>
                   <p className="text-sm text-white/70 max-w-xs leading-relaxed">
-                    Espacio reservado. Cuando tengas la imagen, la reemplazamos acá.
+                    {about.photo_placeholder_body}
                   </p>
                 </div>
               </div>
             )}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#000336]/50 to-transparent" />
             <p className="absolute bottom-4 left-4 right-4 z-10 font-display text-sm font-semibold text-white drop-shadow">
-              El equipo detrás de cada servicio
+              {about.photo_caption}
             </p>
           </motion.div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-3">
-          {highlights.map((item, index) => {
-            const Icon = item.icon;
+          {about.highlights.map((item, index) => {
+            const Icon = getSectionIcon(item.icon_key) ?? ShieldCheck;
             return (
               <motion.div
-                key={item.title}
+                key={`${item.title}-${index}`}
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

@@ -8,19 +8,23 @@ import { Process } from '../sections/Process';
 import { WhyUs } from '../sections/WhyUs';
 import { Team } from '../sections/Team';
 import { Coverage } from '../sections/Coverage';
-import { Faq, FAQ_ITEMS } from '../sections/Faq';
+import { Faq } from '../sections/Faq';
 import { Contact } from '../sections/Contact';
 import { Footer } from '../components/Footer';
 import { Seo } from '../components/seo/Seo';
 import { localBusinessJsonLd } from '../components/seo/JsonLd';
 import { SITE_DEFAULT_DESCRIPTION, SITE_DEFAULT_TITLE } from '../lib/seo';
 import { hashFromHref, scrollToSection } from '../lib/scroll';
+import { useSiteContent } from '../contexts/SiteContentContext';
 
-function faqJsonLd() {
-  return {
+export function HomePage() {
+  const location = useLocation();
+  const { content } = useSiteContent();
+
+  const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: FAQ_ITEMS.map((item) => ({
+    mainEntity: content.faq.items.map((item) => ({
       '@type': 'Question',
       name: item.question,
       acceptedAnswer: {
@@ -29,10 +33,6 @@ function faqJsonLd() {
       },
     })),
   };
-}
-
-export function HomePage() {
-  const location = useLocation();
 
   useEffect(() => {
     if (!location.hash) return;
@@ -73,7 +73,7 @@ export function HomePage() {
         title={SITE_DEFAULT_TITLE}
         description={SITE_DEFAULT_DESCRIPTION}
         path="/"
-        jsonLd={[localBusinessJsonLd(), faqJsonLd()]}
+        jsonLd={[localBusinessJsonLd(), faqJsonLd]}
       />
       <Header />
       <main className="flex-grow">

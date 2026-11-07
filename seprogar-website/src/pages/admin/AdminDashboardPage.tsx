@@ -46,6 +46,11 @@ export function AdminDashboardPage() {
     },
   ];
 
+  const contentLinks = [
+    { label: 'Contenido (Hero / Proceso / Nosotros / FAQ / Zonas)', to: '/gestion-seprogar/panel/contenido' },
+    { label: 'Ajustes de contacto', to: '/gestion-seprogar/panel/ajustes' },
+  ];
+
   return (
     <div className="space-y-8">
       <AdminPageHeader
@@ -76,6 +81,18 @@ export function AdminDashboardPage() {
         })}
       </div>
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        {contentLinks.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            className="rounded-2xl border border-theme bg-surface px-5 py-4 text-sm font-semibold text-foreground transition hover:border-[#F37021]/40"
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
+
       <AdminCard>
         <div className="flex gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-300">
@@ -92,7 +109,8 @@ export function AdminDashboardPage() {
       </AdminCard>
 
       <AdminAlert tone="info">
-        Tip: usá el interruptor de tema en la barra superior para trabajar en claro u oscuro.
+        Tip: en <strong>Contenido</strong> editás FAQ y zonas; en <strong>Ajustes</strong> el teléfono,
+        WhatsApp y horarios. Siempre publicá para que se vea en la web.
       </AdminAlert>
     </div>
   );

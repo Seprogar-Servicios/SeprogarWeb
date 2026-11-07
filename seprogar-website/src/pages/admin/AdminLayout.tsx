@@ -1,5 +1,15 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Briefcase, ExternalLink, Images, LayoutDashboard, LogOut, Users, Wrench } from 'lucide-react';
+import {
+  Briefcase,
+  ExternalLink,
+  FileText,
+  Images,
+  LayoutDashboard,
+  LogOut,
+  Settings2,
+  Users,
+  Wrench,
+} from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Seo } from '../../components/seo/Seo';
 import { ThemeToggle } from '../../components/ThemeToggle';
@@ -9,6 +19,8 @@ const links = [
   { to: '/gestion-seprogar/panel/especialidades', label: 'Especialidades', icon: Wrench },
   { to: '/gestion-seprogar/panel/trabajos', label: 'Trabajos', icon: Images },
   { to: '/gestion-seprogar/panel/personas', label: 'Equipo', icon: Users },
+  { to: '/gestion-seprogar/panel/contenido', label: 'Contenido', icon: FileText },
+  { to: '/gestion-seprogar/panel/ajustes', label: 'Ajustes', icon: Settings2 },
   { to: '/gestion-seprogar/panel/administradores', label: 'Administradores', icon: Briefcase },
 ];
 

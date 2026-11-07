@@ -1,22 +1,27 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Wrench, Phone, ChevronRight, ShieldCheck, Clock3 } from 'lucide-react';
+import { Wrench, Phone, ChevronRight } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-
-const ROTATING_WORDS = ['hogar', 'empresa', 'negocio', 'consorcio', 'obra', 'local'];
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { whatsappLink } from '../lib/fallbackContent';
+import { getSectionIcon } from '../lib/sectionIcons';
 
 export const Hero = () => {
   const { isDark } = useTheme();
+  const { content } = useSiteContent();
+  const hero = content.hero;
+  const words = hero.rotating_words.length ? hero.rotating_words : ['hogar'];
   const [wordIndex, setWordIndex] = useState(0);
 
   useEffect(() => {
+    setWordIndex(0);
     const id = window.setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
+      setWordIndex((prev) => (prev + 1) % words.length);
     }, 2600);
     return () => window.clearInterval(id);
-  }, []);
+  }, [words.length, words.join('|')]);
 
-  const currentWord = ROTATING_WORDS[wordIndex];
+  const currentWord = words[wordIndex % words.length];
 
   return (
     <section
@@ -25,7 +30,6 @@ export const Hero = () => {
         isDark ? 'text-white' : 'text-[#000336]'
       }`}
     >
-      {/* Fondos distintos light / dark */}
       <div className="absolute inset-0 transition-opacity duration-500">
         {isDark ? (
           <>
@@ -89,9 +93,7 @@ export const Hero = () => {
               transition={{ delay: 0.15, duration: 0.45 }}
             >
               <Wrench className="mr-2 text-[#F37021]" size={16} />
-              <span className="text-sm font-semibold tracking-wide">
-                Instalaciones y mantenimiento profesional
-              </span>
+              <span className="text-sm font-semibold tracking-wide">{hero.eyebrow}</span>
             </motion.div>
 
             <motion.h1
@@ -100,9 +102,9 @@ export const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25, duration: 0.55 }}
             >
-              <span className={isDark ? 'text-white' : 'text-[#000336]'}>Soluciones técnicas</span>
+              <span className={isDark ? 'text-white' : 'text-[#000336]'}>{hero.headline_line1}</span>
               <span className="mt-2 flex flex-wrap items-baseline justify-center gap-x-3 gap-y-1">
-                <span className={isDark ? 'text-white' : 'text-[#000336]'}>para tu</span>
+                <span className={isDark ? 'text-white' : 'text-[#000336]'}>{hero.headline_prefix}</span>
                 <span className="relative inline-flex min-w-[7.5ch] md:min-w-[9ch] justify-center pb-[0.22em] align-baseline">
                   <AnimatePresence mode="wait">
                     <motion.span
@@ -135,8 +137,7 @@ export const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.55 }}
             >
-              Plomería, gas, electricidad y más. Trabajo profesional, respuesta rápida y trato
-              directo en cada intervención.
+              {hero.subheadline}
             </motion.p>
 
             <motion.div
@@ -146,17 +147,17 @@ export const Hero = () => {
               transition={{ delay: 0.45, duration: 0.55 }}
             >
               <a
-                href="#servicios"
+                href={hero.primary_cta_href || '#servicios'}
                 className="group relative overflow-hidden bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white px-8 py-4 rounded-full font-semibold flex items-center justify-center shadow-brand transition-transform duration-300 hover:-translate-y-0.5"
               >
                 <span className="relative z-10 flex items-center">
-                  Ver servicios
+                  {hero.primary_cta_label}
                   <ChevronRight className="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
               </a>
 
               <a
-                href="https://wa.me/5491128484962?text=Hola%20Seprogar,%20quiero%20solicitar%20un%20presupuesto"
+                href={whatsappLink(content.settings.whatsapp, hero.secondary_cta_message)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`group px-8 py-4 rounded-full font-semibold flex items-center justify-center border transition-all duration-300 hover:-translate-y-0.5 ${
@@ -166,7 +167,7 @@ export const Hero = () => {
                 }`}
               >
                 <Phone className="mr-2" size={18} />
-                Pedir presupuesto
+                {hero.secondary_cta_label}
               </a>
             </motion.div>
           </motion.div>
@@ -177,39 +178,37 @@ export const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.55 }}
           >
-            {[
-              { number: '5+', label: 'Años de experiencia', icon: ShieldCheck },
-              { number: '500+', label: 'Clientes atendidos', icon: null },
-              { number: '24/7', label: 'Emergencias', icon: Clock3 },
-              { number: 'CABA', label: 'y GBA', icon: null },
-            ].map((stat) => (
-              <motion.div
-                key={stat.label}
-                className={`text-center p-5 md:p-6 rounded-2xl border backdrop-blur-md transition-colors ${
-                  isDark
-                    ? 'border-white/10 bg-white/5 hover:bg-white/10'
-                    : 'border-white/80 bg-white/70 hover:bg-white shadow-sm'
-                }`}
-                whileHover={{ y: -4 }}
-                transition={{ type: 'spring', stiffness: 380, damping: 18 }}
-              >
-                {stat.icon ? (
-                  <stat.icon className="mx-auto mb-2 h-5 w-5 text-[#F37021]" />
-                ) : (
-                  <div className="mx-auto mb-2 h-5" />
-                )}
-                <div className="font-display text-3xl md:text-4xl font-bold text-gradient-brand mb-1">
-                  {stat.number}
-                </div>
-                <div
-                  className={`text-xs md:text-sm font-medium ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
+            {hero.stats.map((stat) => {
+              const Icon = getSectionIcon(stat.icon_key);
+              return (
+                <motion.div
+                  key={`${stat.value}-${stat.label}`}
+                  className={`text-center p-5 md:p-6 rounded-2xl border backdrop-blur-md transition-colors ${
+                    isDark
+                      ? 'border-white/10 bg-white/5 hover:bg-white/10'
+                      : 'border-white/80 bg-white/70 hover:bg-white shadow-sm'
                   }`}
+                  whileHover={{ y: -4 }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 18 }}
                 >
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
+                  {Icon ? (
+                    <Icon className="mx-auto mb-2 h-5 w-5 text-[#F37021]" />
+                  ) : (
+                    <div className="mx-auto mb-2 h-5" />
+                  )}
+                  <div className="font-display text-3xl md:text-4xl font-bold text-gradient-brand mb-1">
+                    {stat.value}
+                  </div>
+                  <div
+                    className={`text-xs md:text-sm font-medium ${
+                      isDark ? 'text-slate-300' : 'text-slate-600'
+                    }`}
+                  >
+                    {stat.label}
+                  </div>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </div>

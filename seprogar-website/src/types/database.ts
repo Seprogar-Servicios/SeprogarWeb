@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { PageSection, SiteSettingsRow } from './content';
 
 export type Especialidad = {
   id: string;
@@ -107,8 +108,38 @@ export type Database = {
         Update: Partial<Profile>;
         Relationships: [];
       };
+      site_settings: {
+        Row: SiteSettingsRow;
+        Insert: Partial<SiteSettingsRow>;
+        Update: Partial<SiteSettingsRow>;
+        Relationships: [];
+      };
+      page_sections: {
+        Row: PageSection;
+        Insert: Partial<PageSection> & Pick<PageSection, 'section_key' | 'section_type'>;
+        Update: Partial<PageSection>;
+        Relationships: [];
+      };
     };
-    Views: Record<string, never>;
+    Views: {
+      v_public_site_settings: {
+        Row: { id: string; payload: Record<string, unknown>; updated_at: string };
+        Relationships: [];
+      };
+      v_public_page_sections: {
+        Row: {
+          id: string;
+          section_key: string;
+          section_type: string;
+          title: string | null;
+          content: Record<string, unknown>;
+          display_order: number;
+          is_visible: boolean;
+          updated_at: string;
+        };
+        Relationships: [];
+      };
+    };
     Functions: {
       is_admin: { Args: Record<string, never>; Returns: boolean };
     };
