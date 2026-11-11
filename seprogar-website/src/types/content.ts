@@ -98,7 +98,16 @@ export type HeroContent = {
   primary_cta_href: string;
   secondary_cta_label: string;
   secondary_cta_message: string;
+  /** URL de fondo (obra real). Vacío = imagen por defecto. */
+  background_image_url: string;
   stats: HeroStat[];
+};
+
+export type ServicesIntroContent = {
+  eyebrow: string;
+  headline: string;
+  highlight: string;
+  subheadline: string;
 };
 
 export type AboutHighlight = {
@@ -121,7 +130,15 @@ export type AboutContent = {
   highlights: AboutHighlight[];
 };
 
-export type SectionType = 'faq' | 'coverage' | 'contact' | 'hero' | 'process' | 'about' | 'custom';
+export type SectionType =
+  | 'faq'
+  | 'coverage'
+  | 'contact'
+  | 'hero'
+  | 'process'
+  | 'about'
+  | 'services'
+  | 'custom';
 
 export type PageSection = {
   id: string;
@@ -152,4 +169,5 @@ export type PublicSiteContent = {
   process: ProcessContent;
   hero: HeroContent;
   about: AboutContent;
+  services: ServicesIntroContent;
 };

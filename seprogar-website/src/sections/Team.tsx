@@ -40,7 +40,7 @@ export const Team = () => {
   }
 
   return (
-    <section id="equipo" className="relative py-14 md:py-16 overflow-hidden">
+    <section id="equipo" className="relative py-16 md:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-surface/50" />
       <div className="container mx-auto px-4 relative z-10">
         <div className="mb-7 md:mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">

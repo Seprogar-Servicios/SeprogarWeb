@@ -10,7 +10,7 @@ export const Faq = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative py-14 md:py-16 overflow-hidden">
+    <section id="faq" className="relative py-16 md:py-20 overflow-hidden">
       <div className="absolute inset-0 mesh-grid opacity-25 pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Wrench, Phone, ChevronRight } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSiteContent } from '../contexts/SiteContentContext';
-import { whatsappLink } from '../lib/fallbackContent';
+import { DEFAULT_HERO_BACKGROUND, whatsappLink } from '../lib/fallbackContent';
 import { getSectionIcon } from '../lib/sectionIcons';
 
 export const Hero = () => {
@@ -12,6 +12,7 @@ export const Hero = () => {
   const hero = content.hero;
   const words = hero.rotating_words.length ? hero.rotating_words : ['hogar'];
   const [wordIndex, setWordIndex] = useState(0);
+  const bgImage = hero.background_image_url.trim() || DEFAULT_HERO_BACKGROUND;
 
   useEffect(() => {
     setWordIndex(0);
@@ -31,36 +32,28 @@ export const Hero = () => {
       }`}
     >
       <div className="absolute inset-0 transition-opacity duration-500">
+        <motion.div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url('${bgImage}')` }}
+          initial={{ scale: 1.08 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 8, ease: [0.22, 1, 0.36, 1] }}
+        />
         {isDark ? (
           <>
-            <div
-              className="absolute inset-0 bg-cover bg-center scale-105"
-              style={{
-                backgroundImage:
-                  "url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=2070&q=80')",
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#000336]/96 via-[#000336]/90 to-[#0F4C81]/92" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(243,112,33,0.32),transparent_52%)]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#000336]/94 via-[#000336]/88 to-[#0F4C81]/90" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(243,112,33,0.34),transparent_52%)]" />
             <div className="absolute -bottom-24 left-1/2 h-48 w-[80%] -translate-x-1/2 rounded-full bg-[#F37021]/25 blur-3xl" />
           </>
         ) : (
           <>
-            <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f0] via-[#f3f7fc] to-[#e7eef8]" />
-            <div
-              className="absolute inset-0 opacity-[0.14] bg-cover bg-center"
-              style={{
-                backgroundImage:
-                  "url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1600&q=70')",
-              }}
-            />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(243,112,33,0.22),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(15,76,129,0.14),transparent_45%)]" />
-            <div className="absolute top-24 right-[12%] h-40 w-40 rounded-full bg-[#F37021]/15 blur-3xl" />
-            <div className="absolute bottom-16 left-[8%] h-52 w-52 rounded-full bg-[#0F4C81]/12 blur-3xl" />
-            <div className="absolute inset-0 mesh-grid opacity-40" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f0]/92 via-[#f3f7fc]/88 to-[#e7eef8]/90" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(243,112,33,0.2),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(15,76,129,0.12),transparent_45%)]" />
+            <div className="absolute inset-0 mesh-grid opacity-30" />
           </>
         )}
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--page-bg)] to-transparent" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -178,7 +171,7 @@ export const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.55 }}
           >
-            {hero.stats.map((stat) => {
+            {hero.stats.map((stat, index) => {
               const Icon = getSectionIcon(stat.icon_key);
               return (
                 <motion.div
@@ -188,8 +181,11 @@ export const Hero = () => {
                       ? 'border-white/10 bg-white/5 hover:bg-white/10'
                       : 'border-white/80 bg-white/70 hover:bg-white shadow-sm'
                   }`}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.08 * index }}
                   whileHover={{ y: -4 }}
-                  transition={{ type: 'spring', stiffness: 380, damping: 18 }}
                 >
                   {Icon ? (
                     <Icon className="mx-auto mb-2 h-5 w-5 text-[#F37021]" />

@@ -10,7 +10,7 @@ export const WhyUs = () => {
   const photo = about.photo_url.trim() || null;
 
   return (
-    <section id="nosotros" className="relative py-14 md:py-16 overflow-hidden">
+    <section id="nosotros" className="relative py-16 md:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-surface/70" />
 
       <div className="container mx-auto px-4 relative z-10">

@@ -8,7 +8,7 @@ export const Coverage = () => {
   const coverage = content.coverage;
 
   return (
-    <section id="zonas" className="relative py-14 md:py-16 overflow-hidden">
+    <section id="zonas" className="relative py-16 md:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-surface/55" />
       <div className="absolute -right-20 top-10 h-72 w-72 rounded-full bg-[#F37021]/10 blur-3xl pointer-events-none" />
       <div className="absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-[#0F4C81]/12 blur-3xl pointer-events-none" />

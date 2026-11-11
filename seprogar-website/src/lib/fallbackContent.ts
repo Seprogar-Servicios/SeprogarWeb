@@ -5,6 +5,7 @@ import type {
   HeroContent,
   ProcessContent,
   PublicSiteContent,
+  ServicesIntroContent,
   SiteSettingsPayload,
 } from '../types/content';
 
@@ -124,6 +125,9 @@ export const FALLBACK_PROCESS: ProcessContent = {
   ],
 };
 
+export const DEFAULT_HERO_BACKGROUND =
+  'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=2070&q=80';
+
 export const FALLBACK_HERO: HeroContent = {
   eyebrow: 'Instalaciones y mantenimiento profesional',
   headline_line1: 'Soluciones técnicas',
@@ -135,12 +139,20 @@ export const FALLBACK_HERO: HeroContent = {
   primary_cta_href: '#servicios',
   secondary_cta_label: 'Pedir presupuesto',
   secondary_cta_message: 'Hola Seprogar, quiero solicitar un presupuesto',
+  background_image_url: '',
   stats: [
     { value: '5+', label: 'Años de experiencia', icon_key: 'shield' },
     { value: '500+', label: 'Clientes atendidos', icon_key: '' },
     { value: '24/7', label: 'Emergencias', icon_key: 'clock' },
     { value: 'CABA', label: 'y GBA', icon_key: '' },
   ],
+};
+
+export const FALLBACK_SERVICES: ServicesIntroContent = {
+  eyebrow: 'Servicios',
+  headline: 'Nuestros',
+  highlight: 'servicios',
+  subheadline: 'Especialidades disponibles. Entrá al detalle para ver trabajos realizados.',
 };
 
 export const FALLBACK_ABOUT: AboutContent = {
@@ -183,6 +195,7 @@ export const FALLBACK_SITE_CONTENT: PublicSiteContent = {
   process: FALLBACK_PROCESS,
   hero: FALLBACK_HERO,
   about: FALLBACK_ABOUT,
+  services: FALLBACK_SERVICES,
 };
 
 export function whatsappLink(whatsapp: string, message: string) {

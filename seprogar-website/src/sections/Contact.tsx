@@ -48,7 +48,7 @@ Muchas gracias.`;
   };
 
   return (
-    <section id="contacto" className="relative py-14 md:py-16 overflow-hidden">
+    <section id="contacto" className="relative py-16 md:py-20 overflow-hidden">
       {/* Elementos decorativos */}
       <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#F37021]/10 rounded-full mix-blend-multiply filter blur-3xl"></div>
       <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-[#000336]/10 rounded-full mix-blend-multiply filter blur-3xl"></div>

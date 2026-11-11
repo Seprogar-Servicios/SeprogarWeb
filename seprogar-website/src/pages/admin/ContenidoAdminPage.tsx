@@ -6,6 +6,7 @@ import {
   normalizeFaq,
   normalizeHero,
   normalizeProcess,
+  normalizeServices,
   publishAllSections,
   publishSection,
   updateSectionDraft,
@@ -17,6 +18,7 @@ import type {
   HeroContent,
   PageSection,
   ProcessContent,
+  ServicesIntroContent,
 } from '../../types/content';
 import {
   AdminAlert,
@@ -34,6 +36,7 @@ import { SECTION_ICON_OPTIONS } from '../../lib/sectionIcons';
 
 const SECTION_LABELS: Record<string, string> = {
   hero: 'Hero (inicio)',
+  services: 'Servicios (textos)',
   faq: 'Preguntas frecuentes',
   coverage: 'Zonas de atención',
   process: 'Cómo trabajamos',
@@ -145,7 +148,7 @@ export function ContenidoAdminPage() {
     <div className="space-y-8">
       <AdminPageHeader
         title="Contenido"
-        description="Editá Hero, Proceso, Nosotros, FAQ y Zonas. Guardá borrador y publicá."
+        description="Editá Hero, Servicios, Proceso, Nosotros, FAQ y Zonas. Guardá borrador y publicá."
         action={
           <div className="flex flex-wrap gap-2">
             <AdminButton type="button" variant="secondary" disabled={saving || !selected} onClick={() => void saveDraft()}>
@@ -225,6 +228,11 @@ export function ContenidoAdminPage() {
           ) : selected.section_key === 'about' ? (
             <AboutEditor
               value={normalizeAbout(selected.draft_content)}
+              onChange={(next) => patchDraft(() => next as unknown as Record<string, unknown>)}
+            />
+          ) : selected.section_key === 'services' ? (
+            <ServicesEditor
+              value={normalizeServices(selected.draft_content)}
               onChange={(next) => patchDraft(() => next as unknown as Record<string, unknown>)}
             />
           ) : (
@@ -341,6 +349,35 @@ function FaqEditor({
           <AdminInput value={value.cta_message} onChange={(e) => onChange({ ...value, cta_message: e.target.value })} />
         </AdminField>
       </div>
+    </div>
+  );
+}
+
+function ServicesEditor({
+  value,
+  onChange,
+}: {
+  value: ServicesIntroContent;
+  onChange: (next: ServicesIntroContent) => void;
+}) {
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      <AdminField label="Antetítulo">
+        <AdminInput value={value.eyebrow} onChange={(e) => onChange({ ...value, eyebrow: e.target.value })} />
+      </AdminField>
+      <AdminField label="Palabra destacada">
+        <AdminInput value={value.highlight} onChange={(e) => onChange({ ...value, highlight: e.target.value })} />
+      </AdminField>
+      <AdminField label="Título" className="md:col-span-2">
+        <AdminInput value={value.headline} onChange={(e) => onChange({ ...value, headline: e.target.value })} />
+      </AdminField>
+      <AdminField label="Subtítulo" className="md:col-span-2">
+        <AdminTextarea
+          rows={3}
+          value={value.subheadline}
+          onChange={(e) => onChange({ ...value, subheadline: e.target.value })}
+        />
+      </AdminField>
     </div>
   );
 }
@@ -573,6 +610,26 @@ function HeroEditor({
             onChange={(e) => onChange({ ...value, secondary_cta_message: e.target.value })}
           />
         </AdminField>
+        <AdminField
+          label="Imagen de fondo (URL)"
+          className="md:col-span-2"
+          hint="Pegá una URL de foto real de obra. Vacío = imagen por defecto."
+        >
+          <AdminInput
+            value={value.background_image_url}
+            onChange={(e) => onChange({ ...value, background_image_url: e.target.value })}
+            placeholder="https://… o /img/hero-obra.jpg"
+          />
+        </AdminField>
+        {value.background_image_url.trim() ? (
+          <div className="md:col-span-2 overflow-hidden rounded-xl border border-theme">
+            <img
+              src={value.background_image_url}
+              alt="Vista previa fondo hero"
+              className="h-36 w-full object-cover"
+            />
+          </div>
+        ) : null}
       </div>
 
       <div className="space-y-3">

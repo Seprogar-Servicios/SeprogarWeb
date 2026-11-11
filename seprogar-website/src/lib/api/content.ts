@@ -5,6 +5,7 @@ import {
   FALLBACK_FAQ,
   FALLBACK_HERO,
   FALLBACK_PROCESS,
+  FALLBACK_SERVICES,
   FALLBACK_SETTINGS,
   FALLBACK_SITE_CONTENT,
 } from '../fallbackContent';
@@ -17,6 +18,7 @@ import type {
   PageSection,
   ProcessContent,
   PublicSiteContent,
+  ServicesIntroContent,
   SiteSettingsPayload,
   SiteSettingsRow,
   SocialLinks,
@@ -161,7 +163,22 @@ export function normalizeHero(raw: Record<string, unknown> | null | undefined): 
       raw?.secondary_cta_message,
       FALLBACK_HERO.secondary_cta_message,
     ),
+    background_image_url: asString(
+      raw?.background_image_url,
+      FALLBACK_HERO.background_image_url,
+    ),
     stats: stats.length ? stats : FALLBACK_HERO.stats,
+  };
+}
+
+export function normalizeServices(
+  raw: Record<string, unknown> | null | undefined,
+): ServicesIntroContent {
+  return {
+    eyebrow: asString(raw?.eyebrow, FALLBACK_SERVICES.eyebrow),
+    headline: asString(raw?.headline, FALLBACK_SERVICES.headline),
+    highlight: asString(raw?.highlight, FALLBACK_SERVICES.highlight),
+    subheadline: asString(raw?.subheadline, FALLBACK_SERVICES.subheadline),
   };
 }
 
@@ -211,7 +228,7 @@ export async function fetchPublicSiteContent(): Promise<PublicSiteContent> {
       supabase
         .from('v_public_page_sections')
         .select('section_key, content')
-        .in('section_key', ['faq', 'coverage', 'process', 'hero', 'about']),
+        .in('section_key', ['faq', 'coverage', 'process', 'hero', 'about', 'services']),
     ]);
 
     if (settingsRes.error || sectionsRes.error) {
@@ -237,6 +254,7 @@ export async function fetchPublicSiteContent(): Promise<PublicSiteContent> {
       process: normalizeProcess(sectionMap.get('process')),
       hero: normalizeHero(sectionMap.get('hero')),
       about: normalizeAbout(sectionMap.get('about')),
+      services: normalizeServices(sectionMap.get('services')),
     };
   } catch (err) {
     console.warn('Fallback de contenido público', err);

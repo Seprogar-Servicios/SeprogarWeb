@@ -11,6 +11,7 @@ import { Coverage } from '../sections/Coverage';
 import { Faq } from '../sections/Faq';
 import { Contact } from '../sections/Contact';
 import { Footer } from '../components/Footer';
+import { StickyWhatsApp } from '../components/StickyWhatsApp';
 import { Seo } from '../components/seo/Seo';
 import { localBusinessJsonLd } from '../components/seo/JsonLd';
 import { SITE_DEFAULT_DESCRIPTION, SITE_DEFAULT_TITLE } from '../lib/seo';
@@ -89,6 +90,7 @@ export function HomePage() {
         </AnimatePresence>
       </main>
       <Footer />
+      <StickyWhatsApp />
     </div>
   );
 }

@@ -90,6 +90,9 @@
   .shadow-brand {
     box-shadow: 0 18px 50px -20px rgb(243 112 33 / 0.45);
   }
+  .page-fade-edge {
+    background: linear-gradient(to top, var(--page-bg), transparent);
+  }
   .mesh-grid {
     background-image:
       linear-gradient(to right, rgb(15 23 42 / 0.04) 1px, transparent 1px),
