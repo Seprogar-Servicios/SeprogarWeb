@@ -79,10 +79,15 @@ export function ContenidoAdminPage() {
     setSaving(true);
     setError(null);
     try {
-      const updated = await updateSectionDraft(selected.id, selected.draft_content, {
-        is_visible: selected.is_visible,
-        title: selected.title,
-      });
+      const updated = await updateSectionDraft(
+        selected.id,
+        selected.draft_content,
+        {
+          is_visible: selected.is_visible,
+          title: selected.title,
+        },
+        selected.section_key,
+      );
       setSections((prev) => prev.map((item) => (item.id === updated.id ? updated : item)));
       setMessage('Borrador guardado');
     } catch (err) {
@@ -97,10 +102,15 @@ export function ContenidoAdminPage() {
     setSaving(true);
     setError(null);
     try {
-      await updateSectionDraft(selected.id, selected.draft_content, {
-        is_visible: selected.is_visible,
-        title: selected.title,
-      });
+      await updateSectionDraft(
+        selected.id,
+        selected.draft_content,
+        {
+          is_visible: selected.is_visible,
+          title: selected.title,
+        },
+        selected.section_key,
+      );
       const updated = await publishSection(selected.id);
       setSections((prev) => prev.map((item) => (item.id === updated.id ? updated : item)));
       setMessage('Sección publicada en la web');
@@ -116,10 +126,15 @@ export function ContenidoAdminPage() {
     setError(null);
     try {
       if (selected) {
-        await updateSectionDraft(selected.id, selected.draft_content, {
-          is_visible: selected.is_visible,
-          title: selected.title,
-        });
+        await updateSectionDraft(
+          selected.id,
+          selected.draft_content,
+          {
+            is_visible: selected.is_visible,
+            title: selected.title,
+          },
+          selected.section_key,
+        );
       }
       await publishAllSections();
       await load();

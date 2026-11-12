@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../types/database';
+import { safeImageUrl } from './safeUrl';
 
 const url = import.meta.env.VITE_SUPABASE_URL;
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -22,8 +23,12 @@ const STORAGE_BUCKET = 'catalogo';
 
 export function getPublicMediaUrl(path: string | null | undefined): string | null {
   if (!path) return null;
-  if (path.startsWith('http://') || path.startsWith('https://')) return path;
-  const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+  const cleaned = safeImageUrl(path);
+  if (!cleaned) return null;
+  if (cleaned.startsWith('http://') || cleaned.startsWith('https://') || cleaned.startsWith('/')) {
+    return cleaned;
+  }
+  const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(cleaned);
   return data.publicUrl;
 }
 

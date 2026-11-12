@@ -4,6 +4,7 @@ import { Wrench, Phone, ChevronRight } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { DEFAULT_HERO_BACKGROUND, whatsappLink } from '../lib/fallbackContent';
+import { safeCssBackgroundImage, safeHref } from '../lib/safeUrl';
 import { getSectionIcon } from '../lib/sectionIcons';
 
 export const Hero = () => {
@@ -12,7 +13,9 @@ export const Hero = () => {
   const hero = content.hero;
   const words = hero.rotating_words.length ? hero.rotating_words : ['hogar'];
   const [wordIndex, setWordIndex] = useState(0);
-  const bgImage = hero.background_image_url.trim() || DEFAULT_HERO_BACKGROUND;
+  const bgStyle = safeCssBackgroundImage(
+    hero.background_image_url.trim() || DEFAULT_HERO_BACKGROUND,
+  );
 
   useEffect(() => {
     setWordIndex(0);
@@ -34,7 +37,7 @@ export const Hero = () => {
       <div className="absolute inset-0 transition-opacity duration-500">
         <motion.div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${bgImage}')` }}
+          style={bgStyle ? { backgroundImage: bgStyle } : undefined}
           initial={{ scale: 1.08 }}
           animate={{ scale: 1 }}
           transition={{ duration: 8, ease: [0.22, 1, 0.36, 1] }}
@@ -140,7 +143,7 @@ export const Hero = () => {
               transition={{ delay: 0.45, duration: 0.55 }}
             >
               <a
-                href={hero.primary_cta_href || '#servicios'}
+                href={safeHref(hero.primary_cta_href, '#servicios')}
                 className="group relative overflow-hidden bg-gradient-to-r from-[#F37021] to-[#FF9E5E] text-white px-8 py-4 rounded-full font-semibold flex items-center justify-center shadow-brand transition-transform duration-300 hover:-translate-y-0.5"
               >
                 <span className="relative z-10 flex items-center">

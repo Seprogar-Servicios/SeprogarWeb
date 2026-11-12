@@ -7,6 +7,7 @@ import type { Especialidad } from '../types/database';
 import { useHasEquipo } from '../hooks/useHasEquipo';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { whatsappLink } from '../lib/fallbackContent';
+import { safeHref, safeMailto, safeTel } from '../lib/safeUrl';
 
 export const Footer = () => {
   const [showScroll, setShowScroll] = useState(false);
@@ -65,14 +66,14 @@ export const Footer = () => {
             </p>
             <div className="flex space-x-3">
               {[
-                { icon: Facebook, label: 'Facebook', url: settings.social_links.facebook || '#' },
-                { icon: Instagram, label: 'Instagram', url: settings.social_links.instagram || '#' },
+                { icon: Facebook, label: 'Facebook', url: safeHref(settings.social_links.facebook, '#') },
+                { icon: Instagram, label: 'Instagram', url: safeHref(settings.social_links.instagram, '#') },
                 {
                   icon: MessageCircle,
                   label: 'WhatsApp',
                   url: whatsappLink(settings.whatsapp, 'Hola Seprogar'),
                 },
-                { icon: Linkedin, label: 'LinkedIn', url: settings.social_links.linkedin || '#' },
+                { icon: Linkedin, label: 'LinkedIn', url: safeHref(settings.social_links.linkedin, '#') },
               ].map((social, index) => (
                 <a
                   key={index}
@@ -173,7 +174,7 @@ export const Footer = () => {
                 <div className="w-8 h-8 bg-[#F37021]/10 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-[#F37021] transition-colors">
                   <Phone className="w-4 h-4 text-[#F37021] group-hover:text-white transition-colors" />
                 </div>
-                <a href={`tel:${settings.phone_tel}`} className="text-gray-300 hover:text-white transition-colors">
+                <a href={safeTel(settings.phone_tel)} className="text-gray-300 hover:text-white transition-colors">
                   {settings.phone_display}
                 </a>
               </li>
@@ -182,7 +183,7 @@ export const Footer = () => {
                   <Mail className="w-4 h-4 text-[#F37021] group-hover:text-white transition-colors" />
                 </div>
                 <a
-                  href={`mailto:${settings.contact_email}`}
+                  href={safeMailto(settings.contact_email)}
                   className="text-gray-300 hover:text-white transition-colors"
                 >
                   {settings.contact_email}

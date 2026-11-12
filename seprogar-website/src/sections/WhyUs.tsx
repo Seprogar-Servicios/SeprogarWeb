@@ -2,12 +2,13 @@ import { motion } from 'framer-motion';
 import { Phone, Sparkles, Camera, ShieldCheck } from 'lucide-react';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { whatsappLink } from '../lib/fallbackContent';
+import { safeImageUrl } from '../lib/safeUrl';
 import { getSectionIcon } from '../lib/sectionIcons';
 
 export const WhyUs = () => {
   const { content } = useSiteContent();
   const about = content.about;
-  const photo = about.photo_url.trim() || null;
+  const photo = safeImageUrl(about.photo_url) || null;
 
   return (
     <section id="nosotros" className="relative py-16 md:py-20 overflow-hidden">
